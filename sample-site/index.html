@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Business</title>
+<style>
+:root{--bg:#0b0b0b;--fg:#f4f4f4;--mute:#a8a8a8;--line:#2a2a2a;--card:#151515}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:Helvetica,Arial,sans-serif;line-height:1.5}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:linear-gradient(#000c,#0000)}
+nav b{letter-spacing:.08em;font-size:15px}
+nav a{color:var(--fg);text-decoration:none;font-size:13px;margin-left:16px}
+nav .btn{border:1px solid var(--fg);padding:7px 12px;border-radius:999px}
+#hero{height:420vh;position:relative}
+#stage{position:sticky;top:0;height:100vh;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+#shade{position:absolute;inset:0;background:linear-gradient(#0008,#0003 40%,#0006);pointer-events:none}
+.cap{position:absolute;left:0;right:0;text-align:center;padding:0 24px;transition:opacity .25s}
+.cap h1,.cap p{text-shadow:0 2px 18px #000a}
+.cap h1{font-size:clamp(34px,8vw,84px);letter-spacing:.02em;line-height:1.05}
+.cap p{color:#ececec;margin-top:12px;font-size:clamp(14px,2.4vw,20px)}
+#c1{top:38%}
+#c2{bottom:12%;opacity:0}
+#hint{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:12px;letter-spacing:.2em;color:var(--mute)}
+#tag{position:absolute;top:64px;right:16px;font-size:11px;color:var(--mute);border:1px solid var(--line);padding:4px 8px;border-radius:6px;background:#000a}
+section{padding:80px 24px;max-width:980px;margin:0 auto}
+h2{font-size:clamp(26px,5vw,42px);margin-bottom:8px}
+.lead{color:var(--mute);margin-bottom:28px;max-width:620px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{font-size:18px;margin-bottom:6px}
+.card p{color:var(--mute);font-size:15px}
+.price{margin-top:12px;font-weight:bold}
+.find{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.cta{display:inline-block;margin-top:22px;background:var(--fg);color:#000;padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:bold}
+footer{border-top:1px solid var(--line);padding:26px 24px;text-align:center;color:var(--mute);font-size:13px}
+@media (max-width:600px){nav a:not(.btn){display:none}nav b{font-size:13px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav><b>SAMPLE BUSINESS</b><div><a href="#services">Services</a><a href="#why">Why us</a><a href="#find">Find us</a><a class="btn" href="#book">Book now</a></div></nav>
+
+<div id="hero">
+  <div id="stage">
+    <canvas id="cv"></canvas><div id="shade"></div>
+    <div class="cap" id="c1"><h1>Step inside.</h1><p>Welcome to your business.</p></div>
+    <div class="cap" id="c2"><h1>Welcome in.</h1><p>Scroll to see what we do.</p></div>
+    <div id="hint">SCROLL</div>
+    <div id="tag">Sample pitch. Stock video.</div>
+  </div>
+</div>
+
+<section id="services">
+  <h2>Services</h2>
+  <p class="lead">Example text. Replace with the business's real services and prices.</p>
+  <div class="grid">
+    <div class="card"><h3>Service one</h3><p>Short line about what you get.</p><div class="price">From $000</div></div>
+    <div class="card"><h3>Service two</h3><p>Short line about what you get.</p><div class="price">From $000</div></div>
+    <div class="card"><h3>Service three</h3><p>Short line about what you get.</p><div class="price">From $000</div></div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why us</h2>
+  <p class="lead">Example text. Add three real reasons from the owner, such as years in business, a guarantee, or a review count.</p>
+  <div class="grid">
+    <div class="card"><h3>Reason one</h3><p>Short, true, and easy to check.</p></div>
+    <div class="card"><h3>Reason two</h3><p>Short, true, and easy to check.</p></div>
+    <div class="card"><h3>Reason three</h3><p>Short, true, and easy to check.</p></div>
+  </div>
+</section>
+
+<section id="find">
+  <h2>Find us</h2>
+  <p class="lead">The business shows on Google Maps and Apple Maps, with hours and reviews.</p>
+  <div class="find">
+    <div class="card"><h3>Address</h3><p>000 Example Street<br>City, State 00000</p></div>
+    <div class="card"><h3>Hours</h3><p>Mon to Sat, 9 am to 5 pm</p></div>
+    <div class="card"><h3>Call or text</h3><p>(000) 000 0000</p></div>
+  </div>
+  <a id="book" class="cta" href="#">Book now</a>
+</section>
+
+<footer>Sample website. Built as a pitch preview.</footer>
+
+<script>
+const TOTAL=90, PATH="frames/f", EXT=".webp";
+const cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+const hero=document.getElementById("hero"), c1=document.getElementById("c1"), c2=document.getElementById("c2"), hint=document.getElementById("hint");
+const imgs=new Array(TOTAL); let cur=-1, loaded=0;
+function size(){const r=window.devicePixelRatio||1;cv.width=innerWidth*r;cv.height=innerHeight*r;draw(cur<0?0:cur,true)}
+function draw(i,force){
+  const im=imgs[i]; if(!im||!im.complete||!im.naturalWidth) return;
+  if(i===cur&&!force) return; cur=i;
+  const cw=cv.width,ch=cv.height,iw=im.naturalWidth,ih=im.naturalHeight;
+  const s=Math.max(cw/iw,ch/ih), w=iw*s, h=ih*s;
+  ctx.drawImage(im,(cw-w)/2,(ch-h)/2,w,h);
+}
+function frameFor(p){return Math.min(TOTAL-1,Math.max(0,Math.round(p*(TOTAL-1))))}
+let ticking=false;
+function onScroll(){
+  if(ticking) return; ticking=true;
+  requestAnimationFrame(()=>{
+    const max=hero.offsetHeight-innerHeight;
+    const p=Math.min(1,Math.max(0,-hero.getBoundingClientRect().top/max));
+    draw(frameFor(p));
+    c1.style.opacity=Math.max(0,1-p*5);
+    c2.style.opacity=Math.min(1,Math.max(0,(p-0.82)*6));
+    hint.style.opacity=Math.max(0,1-p*8);
+    ticking=false;
+  });
+}
+for(let i=0;i<TOTAL;i++){
+  const im=new Image(); im.src=PATH+String(i).padStart(3,"0")+EXT;
+  im.onload=()=>{loaded++; if(i===0||loaded===TOTAL) draw(frameFor(0),true); onScroll()};
+  imgs[i]=im;
+}
+addEventListener("scroll",onScroll,{passive:true}); addEventListener("resize",size); size(); onScroll();
+</script>
+</body>
+</html>
