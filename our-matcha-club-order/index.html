@@ -85,6 +85,34 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 .sw button.on{box-shadow:0 0 0 3px var(--pink)}
 .star{position:absolute;color:var(--pink);font-size:2.2rem;text-shadow:2px 2px 0 var(--forest);pointer-events:none}
 
+/* newsflash */
+.flash{background:var(--pink);border-bottom:2px solid var(--forest);display:flex;align-items:center;gap:1rem;padding:.6rem 1.2rem;overflow:hidden}
+.flash .fl{flex:none;display:inline-flex;align-items:center;gap:.5rem;background:var(--forest);color:var(--cream);font-family:var(--mono);font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;padding:.35rem .9rem;border-radius:99px}
+.flash .fl i{width:9px;height:9px;border-radius:50%;background:var(--green);animation:blink 1.1s steps(2,start) infinite}
+@keyframes blink{50%{opacity:.15}}
+.mq{flex:1;overflow:hidden;min-width:0}
+.track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.mq:hover .track{animation-play-state:paused}
+.track>div{display:flex}
+.track span{font-family:var(--mono);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;color:var(--forest)}
+.track span::after{content:"\2605";margin:0 1.6rem}
+@keyframes mq{to{transform:translateX(-50%)}}
+.flash .fb{flex:none;font-family:var(--mono);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;text-decoration:none;background:var(--cream);border:2px solid var(--forest);border-radius:99px;padding:.3rem .9rem}
+.flash .fb:hover{background:var(--green)}
+@media(prefers-reduced-motion:reduce){.track{animation:none}.track>div:nth-child(2){display:none}.mq{overflow-x:auto}}
+
+/* weekend drop */
+.weekend{background:var(--lilac);border-bottom:2px solid var(--forest)}
+.wk{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+.wkimg{position:relative;border:3px solid var(--forest);border-radius:26px;box-shadow:8px 8px 0 var(--forest);overflow:hidden;transform:rotate(-1.5deg);background:#efe7d2}
+.wkimg img{width:100%;height:auto}
+.sticker{position:absolute;top:14px;right:14px;background:var(--pink);border:2px solid var(--forest);border-radius:99px;padding:.4rem 1rem;font-family:var(--display);font-size:1.05rem;transform:rotate(6deg);box-shadow:3px 3px 0 var(--forest)}
+.weekend h2{font-size:clamp(2.6rem,6vw,4.6rem)}
+.weekend .lead{font-size:1.1rem;margin-bottom:1.2rem;max-width:30rem}
+.wkstat{display:inline-block;font-family:var(--mono);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;background:var(--cream);border:2px solid var(--forest);border-radius:99px;padding:.3rem .9rem;margin:.2rem 0 1.3rem}
+.wkrow{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.price.big{font-size:2.3rem}
+
 /* menu */
 section.pad{padding:5rem 0}
 .head{max-width:40rem;margin-bottom:2rem}
@@ -93,6 +121,8 @@ section.pad{padding:5rem 0}
 .tab{font-family:var(--mono);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;background:var(--cream);border:2px solid var(--forest);border-radius:99px;padding:.55rem 1.1rem}
 .tab[aria-selected="true"]{background:var(--forest);color:var(--cream)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.4rem}
+.grp{font-size:1.9rem;margin:2.4rem 0 1.1rem}
+.grp:first-child{margin-top:0}
 .card{background:#fff8e8;border:2px solid var(--forest);border-radius:22px;box-shadow:5px 5px 0 var(--forest);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
 .card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--forest)}
 .card .art{height:190px;display:grid;place-items:center;border-bottom:2px solid var(--forest);position:relative}
@@ -138,6 +168,33 @@ section.pad{padding:5rem 0}
 .story li>div{background:var(--cream);border:2px solid var(--forest);border-radius:18px;box-shadow:4px 4px 0 var(--forest);padding:1rem 1.2rem}
 .story h4{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.1;margin-bottom:.3rem}
 .story p{font-size:.98rem}
+
+/* place gallery */
+.place{background:var(--cream);border-top:2px solid var(--forest)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:210px;gap:1rem}
+.shot{position:relative;margin:0;border:2px solid var(--forest);border-radius:20px;box-shadow:5px 5px 0 var(--forest);overflow:hidden;background:var(--mint);display:grid;place-items:center;padding:0;text-align:center}
+.shot:nth-child(1){grid-column:span 2;grid-row:span 2}
+.shot:nth-child(2){background:var(--pink-l)}
+.shot:nth-child(3){background:var(--sun)}
+.shot:nth-child(4){background:var(--lilac)}
+.shot:nth-child(5){background:var(--tan)}
+.shot:nth-child(6){background:var(--mint)}
+.shot .ph{font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2.2rem);line-height:1;padding:1rem;color:var(--forest)}
+.shot:nth-child(1) .ph{font-size:clamp(2rem,4.5vw,3.6rem)}
+.shot .ph::before{content:"\2605";display:block;color:var(--pink);text-shadow:2px 2px 0 var(--forest);margin-bottom:.4rem}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform .4s}
+.shot:hover img{transform:scale(1.04)}
+.shot.has .ph{display:none}
+.shot figcaption{position:absolute;left:10px;bottom:10px;background:var(--cream);border:2px solid var(--forest);border-radius:99px;font-family:var(--mono);font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.2rem .7rem;display:none;pointer-events:none}
+.shot.has figcaption{display:block}
+.visitbar{margin-top:1.8rem;background:var(--forest);color:var(--cream);border-radius:22px;border:2px solid var(--forest);box-shadow:5px 5px 0 var(--pink);padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.visitbar .vs{font-family:var(--display);font-size:1.4rem;margin-top:.2rem}
+.visitbar .row{display:flex;gap:.8rem;flex-wrap:wrap}
+.lb{position:fixed;inset:0;z-index:120;background:rgba(15,42,18,.92);display:grid;place-items:center;padding:1rem}
+.lb img{max-width:min(94vw,1100px);max-height:82vh;border:3px solid var(--cream);border-radius:16px}
+.lb .cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:var(--cream);color:var(--forest);border-radius:99px;padding:.3rem 1rem;font-family:var(--mono);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.lb button{position:absolute;background:var(--cream);color:var(--forest);border:2px solid var(--forest);border-radius:50%;width:46px;height:46px;font-size:1.3rem;font-weight:700;line-height:1}
+.lb .x{top:16px;right:16px}.lb .pv{left:14px;top:50%}.lb .nx{right:14px;top:50%}
 
 /* instagram */
 .ig{background:var(--green);border-block:2px solid var(--forest)}
@@ -260,9 +317,13 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 .modal li{display:flex;justify-content:space-between;gap:1rem}
 .modal .go{font-size:.95rem;margin-bottom:1.2rem}
 
+@media(max-width:1100px){.links{gap:1rem}.links a{font-size:.7rem}}
 @media(max-width:900px){
+  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
+  .shot:nth-child(1){grid-column:span 2;grid-row:span 2}
   .links{display:none}
-  .hero .wrap,.about .wrap,.ordergrid,.contact .wrap,footer .wrap,.ownergrid{grid-template-columns:1fr}
+  .hero .wrap,.about .wrap,.ordergrid,.contact .wrap,footer .wrap,.ownergrid,.wk{grid-template-columns:1fr}
+  .wk{gap:2rem}
   .ownercard{position:static}
   .stage{margin:0 auto}
   #igGrid{grid-template-columns:repeat(2,1fr)}
@@ -274,6 +335,8 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
   footer{padding-bottom:6rem}
 }
 @media(max-width:480px){
+  .flash .fb{display:none}
+  .flash{padding:.5rem .8rem;gap:.7rem}
   .logo{font-size:1.05rem}
   .mark{width:36px;height:36px;font-size:.7rem}
   .cartbtn{padding:.45rem .75rem}
@@ -301,12 +364,22 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#owner">The Owner</a></li>
+      <li><a href="#visit">Visit</a></li>
       <li><a href="#instagram">Instagram</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <a class="cartbtn" href="#order" id="cartBtn" aria-label="View your order">Order <span class="n" id="cartCount">0</span></a>
   </div>
 </nav>
+
+<div class="flash" role="region" aria-label="Newsflash">
+  <span class="fl"><i></i>Newsflash</span>
+  <div class="mq"><div class="track">
+    <div><span>Our weekend drop: Ube My Love. Sat and Sun only.</span><span>Tag your matcha date.</span><span>Come grab one before it's gone.</span></div>
+    <div aria-hidden="true"><span>Our weekend drop: Ube My Love. Sat and Sun only.</span><span>Tag your matcha date.</span><span>Come grab one before it's gone.</span></div>
+  </div></div>
+  <a class="fb" href="#weekend">See the drop</a>
+</div>
 
 <header class="hero" id="top">
   <div class="wrap">
@@ -332,15 +405,31 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 </header>
 
 <main>
+<section class="pad weekend" id="weekend">
+  <div class="wrap wk">
+    <div class="wkimg">
+      <img src="images/ube-weekend-drop.jpg" width="900" height="731" loading="lazy" alt="Ube My Love: purple ube cream over green iced matcha in an Our Matcha Club glass">
+      <span class="sticker">Sat &amp; Sun only</span>
+    </div>
+    <div>
+      <div class="eyebrow">Our weekend drop</div>
+      <h2>Ube My <em class="s">Love</em></h2>
+      <p class="lead">Purple ube cream over green matcha. Tag your matcha date. Come grab one before it is gone.</p>
+      <div class="chips" style="justify-content:flex-start"><span>Ube</span><span>Matcha</span><span>Sat and Sun only</span></div>
+      <div class="wkstat" id="wkStat"></div>
+      <div class="wkrow"><span class="price big" id="wkPrice"></span><button class="btn pink" id="wkAdd" type="button">Add to my order</button></div>
+    </div>
+  </div>
+</section>
 <section class="pad" id="menu">
   <div class="wrap">
     <div class="head">
       <div class="eyebrow">The menu</div>
       <h2>Tap a drink. <em class="s">It goes in your order.</em></h2>
-      <p>Every cup is whisked fresh and poured over ice. Pick as many as you like.</p>
+      <p>Our matcha is whisked fresh for every cup. Pick as many drinks as you like.</p>
     </div>
     <div class="tabs" role="tablist" aria-label="Menu categories" id="tabs"></div>
-    <div class="grid" id="menuGrid"></div>
+    <div id="menuGrid"></div>
   </div>
 </section>
 
@@ -384,6 +473,24 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
         <li><span class="n">5</span><div><h4>Version 1, 2 and 3</h4><p>The pop-up kept changing as the club grew. Each version taught her what people love.</p></div></li>
         <li><span class="n">6</span><div><h4>A home for the club</h4><p>After years in corporate, she quit her job to build a permanent home for Our Matcha Club. A little green corner for a peaceful cup of no drama, just good good matcha.</p></div></li>
       </ol>
+    </div>
+  </div>
+</section>
+
+<section class="pad place" id="visit">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Come visit</div>
+      <h2>A little green corner <em class="s">made for you.</em></h2>
+      <p>Warm lights, a wooden bar and cozy seats. Come for a peaceful cup of no drama, just good good matcha.</p>
+    </div>
+    <div class="gallery" id="gallery"></div>
+    <div class="visitbar">
+      <div><span class="mono" style="font-weight:700;font-size:.74rem">Right now</span><div class="vs" id="visitStatus"></div></div>
+      <div class="row">
+        <a class="btn pink" href="https://ig.me/m/ourmatchaclub" target="_blank" rel="noopener">Ask for directions</a>
+        <a class="btn" href="#order">Order ahead</a>
+      </div>
     </div>
   </div>
 </section>
@@ -449,7 +556,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
             </div>
           </fieldset>
           <div class="f" id="addrWrap" hidden><label class="l" for="fAddr">Delivery address <i>*</i></label><textarea id="fAddr" name="address" autocomplete="street-address" placeholder="House number, street, barangay, city"></textarea></div>
-          <div class="f"><label class="l" for="fNote">Order notes (optional)</label><textarea id="fNote" name="notes" placeholder="Less sweet, extra ice, oat milk and so on"></textarea></div>
+          <div class="f"><label class="l" for="fNote">Order notes (optional)</label><textarea id="fNote" name="notes" placeholder="Less sweet, extra ice, hot or iced and so on"></textarea></div>
           <fieldset class="f"><legend>Payment method <i>*</i></legend>
             <div class="opts">
               <label class="opt"><input type="radio" name="pay" value="GCash" checked><span>GCash</span></label>
@@ -494,7 +601,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     </div>
     <div>
       <h4>Explore</h4>
-      <ul><li><a href="#menu">Menu</a></li><li><a href="#about">About</a></li><li><a href="#owner">The Owner</a></li><li><a href="#instagram">Instagram</a></li><li><a href="#contact">Contact</a></li></ul>
+      <ul><li><a href="#menu">Menu</a></li><li><a href="#about">About</a></li><li><a href="#owner">The Owner</a></li><li><a href="#visit">Visit</a></li><li><a href="#instagram">Instagram</a></li><li><a href="#contact">Contact</a></li></ul>
     </div>
     <div>
       <h4>Open</h4>
@@ -566,17 +673,34 @@ function cupSVG(o){
 /* ---------- menu data ---------- */
 const GREEN = '#5c8d1c';
 const ITEMS = [
-  {id:'classic',cat:'trio',name:'Classic Club',desc:'Our signature. Fresh whisked matcha over milk and ice.',price:160,bg:'#c9f0b4',cup:{bottom:'#f4f1e0',mid:'#b4cf6a',top:GREEN}},
-  {id:'berry',cat:'trio',name:'Berry First',desc:'A fresh berry layer under bright green matcha.',price:180,bg:'#ffd0e2',cup:{bottom:'#c93a6a',mid:'#c4cf7e',top:GREEN}},
-  {id:'mango',cat:'trio',name:'Sunny Mango',desc:'Sweet mango on the bottom, matcha on top.',price:180,bg:'#ffe9a8',cup:{bottom:'#ffb627',mid:'#c9d35a',top:GREEN}},
-  {id:'hojicha',cat:'special',name:'Hojicha',desc:'Nutty, toasty and smooth. Low in caffeine.',price:170,bg:'#e8c9a8',cup:{bottom:'#f1e4d0',mid:'#b98657',top:'#7a4a2b'}},
-  {id:'ube',cat:'special',name:'Ube My Love',desc:'Purple ube, green matcha and a crunchy wafer on top.',price:190,bg:'#dcd0ff',cup:{bottom:'#8f6fe0',mid:'#a9b86a',top:GREEN,wafer:true}},
-  {id:'shot',cat:'addon',name:'Extra Matcha Shot',desc:'Make any drink stronger and greener.',price:40,bg:'#c9f0b4',cup:{bottom:'#7fa82e',mid:'#6f9a27',top:'#4f7a1f',noStraw:true}},
-  {id:'oat',cat:'addon',name:'Oat Milk Swap',desc:'Swap the milk in any drink for creamy oat milk.',price:30,bg:'#fff2cf',cup:{bottom:'#f7ecd2',mid:'#efe1bd',top:'#e6d4a6',noStraw:true}},
-  {id:'foam',cat:'addon',name:'Sweet Cream Foam',desc:'A soft cloud of sweet cream on top.',price:35,bg:'#ffd0e2',cup:{bottom:'#b4cf6a',mid:'#8fb83e',top:GREEN,foam:true,noStraw:true}}
+  {id:'ube',cat:'weekend',name:'Ube My Love',desc:'Our weekend drop. Purple ube cream over green matcha. Saturday and Sunday only.',price:240,bg:'#dcd0ff',cup:{bottom:'#d8c2f0',mid:'#6f9a27',top:'#c9a8ea'}},
+
+  {id:'classic',cat:'whims',name:'The Classic Club',desc:'Our signature. Smooth, premium ceremonial matcha whisked over oat milk and our signature sweetener.',price:225,bg:'#c9f0b4',cup:{bottom:'#f1ead2',mid:'#b4cf6a',top:GREEN}},
+  {id:'berry',cat:'whims',name:'Berry First Matcha',desc:'Bold ceremonial matcha over oat milk and strawberry puree. New to matcha? Try this.',price:235,bg:'#ffd0e2',cup:{bottom:'#d8467a',mid:'#c4cf7e',top:GREEN}},
+  {id:'mango',cat:'whims',name:'Sunny Mango Matcha',desc:'Tropical, bright mango puree topped with smooth whisked matcha and oat milk.',price:235,bg:'#ffe9a8',cup:{bottom:'#ffb627',mid:'#c9d35a',top:GREEN}},
+  {id:'hoji',cat:'whims',name:'Velvet Hoji',desc:'Deep, roasted and earthy hojicha over oat milk. Naturally lower in caffeine for a cozy, grounded vibe.',price:220,bg:'#e8c9a8',cup:{bottom:'#f1e4d0',mid:'#b98657',top:'#7a4a2b'}},
+  {id:'stargirl',cat:'whims',name:'Star Girl Matcha',desc:'Honey Star cereal milk layered under a rich ceremonial matcha.',price:240,bg:'#fff2cf',cup:{bottom:'#ffe08a',mid:'#c9d35a',top:GREEN}},
+  {id:'vibes',cat:'whims',name:'Good Vibes Matcha',desc:'Trix cereal milk paired with a smooth, perfectly whisked shot of ceremonial grade matcha.',price:240,bg:'#d6ecff',cup:{bottom:'#f7a8c8',mid:'#c4cf7e',top:GREEN}},
+
+  {id:'latte',cat:'coffee',name:'Cafe Latte',desc:'Rich espresso and smooth creamy milk. Syrups: vanilla or roasted hazelnut. Hot or iced.',price:130,bg:'#e8c9a8',cup:{bottom:'#f2e4cf',mid:'#b9895d',top:'#6b4528'}},
+  {id:'mocha',cat:'coffee',name:'Mocha Loka',desc:'Deep espresso and rich house made chocolate. Hot or iced.',price:150,bg:'#ead3bd',cup:{bottom:'#8a5a3a',mid:'#6b4528',top:'#3e2412'}},
+  {id:'oatwhite',cat:'coffee',name:'Oat White',desc:'Iced shaken espresso with brown sugar syrup, a splash of oat milk and a dash of cinnamon.',price:180,bg:'#f3e6cf',cup:{bottom:'#f2e4cf',mid:'#a87445',top:'#5a3a20'}},
+  {id:'tonic',cat:'coffee',name:'Mango Espresso Tonic',desc:'Bubbly tonic water and sweet mango puree topped with espresso. Light, fizzy and refreshing.',price:190,bg:'#ffe9a8',cup:{bottom:'#ffb627',mid:'#f4d27a',top:'#5a3a20'}},
+
+  {id:'jasmine',cat:'other',name:'Jasmine Green Tea',desc:'Light, aromatic and beautifully floral.',price:99,bg:'#f4f6c8',cup:{bottom:'#fff2b0',mid:'#f6eaa0',top:'#e9dc8a'}},
+  {id:'genmai',cat:'other',name:'Genmaicha',desc:'Japanese green tea blended with roasted popped brown rice. Deep and complex.',price:99,bg:'#fbe6b4',cup:{bottom:'#e9c46a',mid:'#e0b85a',top:'#c99a3c'}},
+  {id:'hibiscus',cat:'other',name:'Hibiscus Tea',desc:'Naturally caffeine free. Calming herbal floral notes for a relaxed mind.',price:99,bg:'#ffd0e2',cup:{bottom:'#e63b6f',mid:'#c42a5c',top:'#9d1f4a'}},
+  {id:'choco',cat:'other',name:'Choco Loko',desc:'A decadent premium chocolate blend with creamy milk. Hot or iced.',price:120,bg:'#ead3bd',cup:{bottom:'#6b4528',mid:'#a87445',top:'#f2e4cf'}},
+  {id:'ichigo',cat:'other',name:'Ichigo Mylk',desc:'Creamy milk swirled with our signature sweet strawberry puree. No caffeine, just pure pink vibes.',price:120,bg:'#ffd0e2',cup:{bottom:'#ff9fc0',mid:'#ffc1d6',top:'#ffd9e6'}},
+  {id:'peach',cat:'other',name:'Peach Oolong Iced Tea',desc:'Crisp, floral oolong tea with a sweet punch of peach and creamy salted foam on top.',price:130,bg:'#ffe0c8',cup:{bottom:'#ffb07a',mid:'#ffc89a',top:'#fff0d8',foam:true}},
+
+  {id:'foam',cat:'addon',name:'Sea Salt Cream Cold Foam',desc:'A velvety, savory sweet cream cloud on top.',price:30,bg:'#ffd0e2',cup:{bottom:'#b4cf6a',mid:'#8fb83e',top:GREEN,foam:true,noStraw:true}},
+  {id:'oat',cat:'addon',name:'Oat Milk Upgrade',desc:'Barista grade oat milk.',price:35,bg:'#fff2cf',cup:{bottom:'#f7ecd2',mid:'#efe1bd',top:'#e6d4a6',noStraw:true}},
+  {id:'shot',cat:'addon',name:'Extra Espresso Shot',desc:'Add a rich espresso shot.',price:30,bg:'#e8c9a8',cup:{bottom:'#8a5a3a',mid:'#6b4528',top:'#3e2412',noStraw:true}}
 ];
-const CATS = [['all','All'],['trio','Matcha Trio'],['special','Specials'],['addon','Add-ons']];
-const CAT_LABEL = {trio:'Trio',special:'Special',addon:'Add-on'};
+const CATS = [['all','All'],['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha'],['addon','Add-ons']];
+const GROUPS = [['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha or Coffee'],['addon','Premium Customizations']];
+const CAT_LABEL = {weekend:'Weekend',whims:'Matcha',coffee:'Coffee',other:'Non-matcha',addon:'Add-on'};
 const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const peso = n => '₱' + n.toLocaleString('en-PH');
 
@@ -596,13 +720,20 @@ function renderTabs(){
 }
 function renderMenu(){
   grid.innerHTML = '';
-  ITEMS.filter(i=>cat==='all'||i.cat===cat).forEach(i=>{
-    const el = document.createElement('article');
-    el.className = 'card';
-    el.innerHTML = `<div class="art" style="background:${i.bg}"><span class="tagp">${CAT_LABEL[i.cat]}</span>${cupSVG(i.cup)}</div>
-      <div class="body"><h3>${i.name}</h3><p>${i.desc}</p>
-      <div class="foot"><span class="price">${peso(i.price)}</span><button class="add" type="button" data-id="${i.id}" aria-label="Add ${i.name} to your order">Add +</button></div></div>`;
-    grid.appendChild(el);
+  GROUPS.filter(([k])=>cat==='all'||cat===k).forEach(([k,label])=>{
+    const items = ITEMS.filter(i=>i.cat===k);
+    if(!items.length) return;
+    const h = document.createElement('h3'); h.className = 'grp'; h.textContent = label; grid.appendChild(h);
+    const g = document.createElement('div'); g.className = 'grid';
+    items.forEach(i=>{
+      const el = document.createElement('article');
+      el.className = 'card';
+      el.innerHTML = `<div class="art" style="background:${i.bg}"><span class="tagp">${CAT_LABEL[i.cat]}</span>${cupSVG(i.cup)}</div>
+        <div class="body"><h3>${i.name}</h3><p>${i.desc}</p>
+        <div class="foot"><span class="price">${peso(i.price)}</span><button class="add" type="button" data-id="${i.id}" aria-label="Add ${i.name} to your order">Add +</button></div></div>`;
+      g.appendChild(el);
+    });
+    grid.appendChild(g);
   });
 }
 grid.addEventListener('click', e=>{
@@ -759,6 +890,7 @@ function openStatus(){
 (function(){
   const s = openStatus();
   $('openNow').innerHTML = `<span class="dot${s.open?'':' off'}"></span><b>${s.text}</b>`;
+  $('visitStatus').textContent = s.text;
   const h = $('hours');
   [1,2,3,4,5,6,0].forEach(d=>{
     const on = OPEN_DAYS.includes(d);
@@ -805,7 +937,58 @@ if(BEHOLD_FEED_ID){
   igGrid.replaceWith(w);
 }
 
+/* ---------- photos of the place ---------- */
+// Put the photos in a folder named "photos" next to this file. Use these file names, or change the names here.
+// Any photo that is missing shows a colored tile instead, so the section always looks finished.
+const PLACE_PHOTOS = [
+  ['photos/place-1.jpg','The wooden bar'],
+  ['photos/place-2.jpg','Warm lights'],
+  ['photos/place-3.jpg','Cozy seats'],
+  ['photos/place-4.jpg','The green corner'],
+  ['photos/place-5.jpg','Fresh pours'],
+  ['photos/place-6.jpg','Matcha with friends']
+];
+const loaded = [];
+const gal = $('gallery');
+PLACE_PHOTOS.forEach(([src,label])=>{
+  const f = document.createElement('figure'); f.className = 'shot';
+  f.innerHTML = `<div class="ph">${label}</div><figcaption>${label}</figcaption>`;
+  const im = new Image(); im.alt = label + ' at Our Matcha Club'; im.loading = 'lazy'; im.decoding = 'async';
+  im.addEventListener('load', ()=>{ f.classList.add('has'); f.insertBefore(im, f.firstChild); loaded.push({im,label}); im.addEventListener('click', ()=>openLB(im)); });
+  im.src = src;
+  gal.appendChild(f);
+});
+let lbIdx = 0, lbEl = null;
+function openLB(im){
+  lbIdx = loaded.findIndex(x=>x.im===im);
+  lbEl = document.createElement('div'); lbEl.className = 'lb'; lbEl.setAttribute('role','dialog'); lbEl.setAttribute('aria-label','Photo viewer');
+  lbEl.innerHTML = `<img alt=""><div class="cap"></div><button class="x" type="button" aria-label="Close">&times;</button><button class="pv" type="button" aria-label="Previous photo">&lsaquo;</button><button class="nx" type="button" aria-label="Next photo">&rsaquo;</button>`;
+  document.body.appendChild(lbEl);
+  const show = ()=>{ const p = loaded[lbIdx]; lbEl.querySelector('img').src = p.im.src; lbEl.querySelector('img').alt = p.im.alt; lbEl.querySelector('.cap').textContent = p.label; };
+  const step = d=>{ lbIdx = (lbIdx+d+loaded.length)%loaded.length; show(); };
+  const close = ()=>{ lbEl.remove(); lbEl = null; removeEventListener('keydown',key); };
+  const key = e=>{ if(e.key==='Escape') close(); else if(e.key==='ArrowRight') step(1); else if(e.key==='ArrowLeft') step(-1); };
+  lbEl.querySelector('.x').onclick = close;
+  lbEl.querySelector('.pv').onclick = ()=>step(-1);
+  lbEl.querySelector('.nx').onclick = ()=>step(1);
+  lbEl.addEventListener('click', e=>{ if(e.target===lbEl) close(); });
+  addEventListener('keydown', key);
+  show();
+}
+
 renderTabs(); renderMenu(); syncForm();
+
+/* weekend drop */
+$('wkPrice').textContent = peso(byId.ube.price);
+{
+  const dd = manila().d;
+  $('wkStat').textContent = (dd===6||dd===0) ? 'On the menu today' : 'Back this Saturday';
+}
+$('wkAdd').addEventListener('click', ()=>{
+  addItem('ube');
+  const b = $('wkAdd'); b.textContent = 'Added';
+  setTimeout(()=>{ b.textContent = 'Add to my order'; }, 900);
+});
 </script>
 
 <script type="importmap">{"imports":{"three":"../vendor/three.module.min.js","three/addons/":"../vendor/addons/"}}</script>
