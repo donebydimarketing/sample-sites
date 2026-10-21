@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile Detailing Concept Sample</title>
+<meta name="description" content="Concept sample: a 3D mobile detailing website. The car follows your mouse and turns as you scroll.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--fg:#fafafa;--mute:#9a9a9a;--line:#2a2a2a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.tag{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:20;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);background:rgba(10,10,10,.7);border:1px solid var(--line);padding:.4rem .9rem;border-radius:99px;white-space:nowrap}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:3.2rem 6% 1rem}
+.logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem;letter-spacing:.01em}
+nav a.btn{font-size:.7rem}
+.btn{display:inline-block;background:var(--fg);color:var(--bg);text-decoration:none;font-weight:700;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;padding:.95rem 1.7rem;border:1px solid var(--fg);transition:background .25s,color .25s}
+.btn:hover{background:transparent;color:var(--fg)}
+.btn.ghost{background:transparent;color:var(--fg)}
+.btn.ghost:hover{background:var(--fg);color:var(--bg)}
+main{position:relative;z-index:5}
+section{min-height:100vh;display:flex;align-items:center;padding:7rem 6% 5rem}
+.col{max-width:520px}
+section[data-side="left"] .col{margin-right:auto}
+section[data-side="right"] .col{margin-left:auto}
+section[data-side="center"]{justify-content:center;text-align:center}
+section[data-side="center"] .col{max-width:640px}
+.eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);margin-bottom:1.1rem}
+h1,h2{font-family:'Playfair Display',serif;font-weight:900;line-height:1.05;letter-spacing:-.01em}
+h1{font-size:clamp(2.8rem,7vw,5.4rem);margin-bottom:1.3rem}
+h2{font-size:clamp(2rem,4.6vw,3.3rem);margin-bottom:1.4rem}
+h1 em,h2 em{font-style:italic;color:var(--mute)}
+p.lead{font-size:1.05rem;color:#cfcfcf;margin-bottom:2rem}
+.row{display:flex;gap:.8rem;flex-wrap:wrap}
+ul.list{list-style:none;border-top:1px solid var(--line)}
+ul.list li{display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);font-size:1.02rem}
+ul.list li span{color:var(--mute);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;align-self:center}
+.steps{counter-reset:s;list-style:none}
+.steps li{counter-increment:s;position:relative;padding:0 0 1.7rem 3.2rem}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:-.1rem;font-family:'Playfair Display',serif;font-weight:900;font-size:1.5rem;color:var(--mute)}
+.steps b{display:block;font-weight:500;font-size:1.1rem;margin-bottom:.15rem}
+.steps p{color:#bdbdbd;font-size:.95rem}
+.pk{display:grid;gap:.8rem}
+.pk div{border:1px solid var(--line);background:rgba(10,10,10,.72);padding:1.15rem 1.3rem;backdrop-filter:blur(6px)}
+.pk b{display:block;font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:.2rem}
+.pk p{color:#bdbdbd;font-size:.92rem}
+footer{position:relative;z-index:5;padding:2rem 6% 2.4rem;border-top:1px solid var(--line);background:rgba(10,10,10,.9);color:var(--mute);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);transition:opacity .5s}
+@media(max-width:820px){
+  section{align-items:flex-end;padding:6rem 0 3rem}
+  section[data-side="center"]{align-items:center}
+  .col{max-width:none!important;background:linear-gradient(180deg,rgba(10,10,10,0),rgba(10,10,10,.82) 28%);margin:0!important;padding:3rem 6% 0}
+  section[data-side="center"] .col{background:rgba(10,10,10,.55);padding:2rem 6%}
+  .tag{font-size:.54rem}
+  nav{padding-top:3rem}
+}
+</style>
+</head>
+<body>
+<div class="tag">Concept sample &middot; your brand goes here</div>
+<canvas id="gl" aria-label="Interactive 3D car that follows your cursor"></canvas>
+
+<nav>
+  <div class="logo">Your Brand</div>
+  <a class="btn" href="#book">Book a detail</a>
+</nav>
+
+<main>
+  <section data-side="left" id="top">
+    <div class="col">
+      <div class="eyebrow">Mobile auto detailing</div>
+      <h1>Your car. <em>Brought back.</em></h1>
+      <p class="lead">We come to your driveway or your office. Water, power and every tool are on our van. You walk out to a car that looks new.</p>
+      <div class="row">
+        <a class="btn" href="#book">Book a detail</a>
+        <a class="btn ghost" href="#services">See services</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="right" id="services">
+    <div class="col">
+      <div class="eyebrow">What we do</div>
+      <h2>Every inch, <em>done right.</em></h2>
+      <ul class="list">
+        <li>Full detail <span>Inside + out</span></li>
+        <li>Interior deep clean <span>Seats + carpet</span></li>
+        <li>Wash and wax <span>Paint care</span></li>
+        <li>Headlight polish <span>Clear again</span></li>
+        <li>Ceramic coating <span>Long shine</span></li>
+        <li>Fleet detailing <span>Business vehicles</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-side="left" id="process">
+    <div class="col">
+      <div class="eyebrow">How it works</div>
+      <h2>Three steps. <em>No stress.</em></h2>
+      <ol class="steps">
+        <li><b>Book online</b><p>Pick your service and a time that fits your day.</p></li>
+        <li><b>We come to you</b><p>Our van arrives with water and power. You do not need to be home.</p></li>
+        <li><b>Take your keys back</b><p>We check every panel with you before we leave.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section data-side="right" id="packages">
+    <div class="col">
+      <div class="eyebrow">Packages</div>
+      <h2>Pick your <em>level.</em></h2>
+      <div class="pk">
+        <div><b>Refresh</b><p>Hand wash, wheels, windows and a quick interior vacuum.</p></div>
+        <div><b>Full Detail</b><p>Deep interior clean, paint wash and wax, tire dressing.</p></div>
+        <div><b>Showroom</b><p>Everything in Full Detail plus polish and a protective coating.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="center" id="book">
+    <div class="col">
+      <div class="eyebrow">Ready when you are</div>
+      <h2>Ready for a <em>clean car?</em></h2>
+      <p class="lead">Tell us your car and your address. We reply with a time the same day.</p>
+      <div class="row" style="justify-content:center">
+        <a class="btn" href="#">Book a detail</a>
+        <a class="btn ghost" href="#">Call or text</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>Concept sample website. Your logo, name and details go here.</footer>
+<div class="hint" id="hint">Move your mouse. Scroll to turn the car.</div>
+
+<script type="importmap">{"imports":{"three":"../vendor/three.module.min.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0a);
+scene.fog = new THREE.Fog(0x0a0a0a, 9, 22);
+
+const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 60);
+
+/* Studio reflections: a dark room with a few bright light panels */
+function makeEnv(){
+  const env = new THREE.Scene();
+  const room = new THREE.Mesh(new THREE.BoxGeometry(30,16,30), new THREE.MeshBasicMaterial({color:0x111111, side:THREE.BackSide}));
+  env.add(room);
+  const panel = (w,h,x,y,z,ry,rx,k)=>{
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshBasicMaterial({color:new THREE.Color().setScalar(k), side:THREE.DoubleSide}));
+    m.position.set(x,y,z); m.rotation.y=ry||0; m.rotation.x=rx||0; env.add(m);
+  };
+  panel(14,3,0,7.5,0,0,Math.PI/2,6);
+  panel(2.5,9,-11,3,0,Math.PI/2,0,4);
+  panel(2.5,9,11,3,0,Math.PI/2,0,4);
+  panel(10,2,0,3,-12,0,0,3);
+  const pm = new THREE.PMREMGenerator(renderer);
+  const tex = pm.fromScene(env, 0.03).texture;
+  pm.dispose();
+  return tex;
+}
+scene.environment = makeEnv();
+
+/* Lights */
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(4,7,5); scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 1.6);
+rim.position.set(-5,3,-6); scene.add(rim);
+scene.add(new THREE.AmbientLight(0xffffff, 0.15));
+
+/* Floor */
+const floor = new THREE.Mesh(
+  new THREE.CircleGeometry(14, 64),
+  new THREE.MeshStandardMaterial({color:0x0e0e0e, roughness:0.35, metalness:0.7})
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+const ring = new THREE.Mesh(new THREE.RingGeometry(3.55, 3.6, 96), new THREE.MeshBasicMaterial({color:0x777777, transparent:true, opacity:.55}));
+ring.rotation.x = -Math.PI/2; ring.position.y = 0.01; scene.add(ring);
+
+/* Car, built from simple shapes. An original design. */
+const car = new THREE.Group();
+const paint = new THREE.MeshPhysicalMaterial({color:0xe9e9e9, metalness:0.55, roughness:0.22, clearcoat:1, clearcoatRoughness:0.05});
+const glass = new THREE.MeshPhysicalMaterial({color:0x050505, metalness:0.9, roughness:0.04, clearcoat:1});
+const tire  = new THREE.MeshStandardMaterial({color:0x0b0b0b, roughness:0.85});
+const rimM  = new THREE.MeshStandardMaterial({color:0xd0d0d0, metalness:1, roughness:0.2});
+const lamp  = new THREE.MeshBasicMaterial({color:new THREE.Color().setScalar(3)});
+const tail  = new THREE.MeshBasicMaterial({color:0x8a8a8a});
+
+const prof = new THREE.Shape();
+prof.moveTo(-2.1,0.32);
+prof.lineTo(2.05,0.32);
+prof.quadraticCurveTo(2.2,0.34,2.22,0.55);
+prof.quadraticCurveTo(2.24,0.84,1.85,0.9);
+prof.lineTo(1.05,1.0);
+prof.lineTo(0.38,1.42);
+prof.quadraticCurveTo(-0.2,1.6,-0.95,1.42);
+prof.lineTo(-1.65,1.08);
+prof.quadraticCurveTo(-2.18,1.02,-2.2,0.75);
+prof.lineTo(-2.2,0.5);
+prof.quadraticCurveTo(-2.2,0.34,-2.1,0.32);
+const bodyGeo = new THREE.ExtrudeGeometry(prof, {depth:1.5, bevelEnabled:true, bevelThickness:0.1, bevelSize:0.07, bevelSegments:10, curveSegments:32});
+bodyGeo.translate(0,0,-0.75);
+const body = new THREE.Mesh(bodyGeo, paint);
+car.add(body);
+
+const win = new THREE.Shape();
+win.moveTo(1.0,1.04); win.lineTo(0.4,1.42);
+win.quadraticCurveTo(-0.2,1.56,-0.9,1.4);
+win.lineTo(-1.5,1.1); win.lineTo(1.0,1.04);
+const winGeo = new THREE.ExtrudeGeometry(win, {depth:1.78, bevelEnabled:false, curveSegments:16});
+winGeo.translate(0,0,-0.89);
+car.add(new THREE.Mesh(winGeo, glass));
+
+const wheelGroups = [];
+for (const sx of [-1.35, 1.35]) for (const sz of [-0.86, 0.86]) {
+  const w = new THREE.Group();
+  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.44,0.44,0.3,40), tire);
+  t.rotation.x = Math.PI/2; w.add(t);
+  const r = new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.32,32), rimM);
+  r.rotation.x = Math.PI/2; w.add(r);
+  for (let i=0;i<5;i++){
+    const sp = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.05,0.34), tire);
+    sp.rotation.z = (i/5)*Math.PI; sp.position.z = 0; w.add(sp);
+  }
+  w.position.set(sx,0.44,sz*1.0);
+  car.add(w); wheelGroups.push(w);
+}
+// headlights and taillights
+for (const z of [-0.55,0.55]) {
+  const h = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.1,0.34), lamp);
+  h.position.set(2.27,0.72,z); car.add(h);
+  const t2 = new THREE.Mesh(new THREE.BoxGeometry(0.08,0.1,0.34), tail);
+  t2.position.set(-2.28,0.78,z); car.add(t2);
+}
+car.position.y = 0.0;
+const rig = new THREE.Group();
+rig.add(car);
+scene.add(rig);
+
+/* Floating sparkles for a clean, polished feel */
+const N = 160;
+const pos = new Float32Array(N*3);
+for (let i=0;i<N;i++){ pos[i*3]=(Math.random()-.5)*14; pos[i*3+1]=Math.random()*5; pos[i*3+2]=(Math.random()-.5)*14; }
+const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pos,3));
+const dot = (()=>{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');const g=x.createRadialGradient(16,16,0,16,16,16);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,32,32);return new THREE.CanvasTexture(c);})();
+const sparks = new THREE.Points(pg, new THREE.PointsMaterial({size:0.07, map:dot, transparent:true, opacity:.55, depthWrite:false, color:0xffffff}));
+scene.add(sparks);
+
+/* Input */
+const mouse = {x:0, y:0, tx:0, ty:0};
+addEventListener('pointermove', e=>{
+  mouse.tx = (e.clientX/innerWidth)*2-1;
+  mouse.ty = (e.clientY/innerHeight)*2-1;
+  hideHint();
+});
+addEventListener('pointerleave', ()=>{mouse.tx=0; mouse.ty=0;});
+let hintGone=false;
+function hideHint(){ if(hintGone) return; hintGone=true; document.getElementById('hint').style.opacity=0; }
+addEventListener('scroll', ()=>{ if (scrollY>40) hideHint(); }, {passive:true});
+
+const sections = [...document.querySelectorAll('main section')];
+let sideX = 0, sideTarget = 0;
+function sideFor(el, wide){
+  if(!wide) return 0;
+  const s = el.dataset.side;
+  return s==='left' ? 2.7 : s==='right' ? -2.7 : 0;
+}
+
+let wide = true;
+function resize(){
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w,h,false);
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+  wide = w/h > 1.1;
+}
+addEventListener('resize', resize); resize();
+
+const clock = new THREE.Clock();
+let yaw = 0.6, camZ = 7, last = performance.now();
+function tick(){
+  const t = clock.getElapsedTime();
+  const now = performance.now(); const dt = Math.min((now-last)/1000, 0.1); last = now;
+  const k = r => 1-Math.exp(-dt*r);
+  mouse.x += (mouse.tx-mouse.x)*k(3.6);
+  mouse.y += (mouse.ty-mouse.y)*k(3.6);
+
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max>0 ? Math.min(Math.max(scrollY/max,0),1) : 0;
+
+  // find the section nearest the middle of the screen
+  let best = sections[0], bd = 1e9;
+  for (const s of sections){ const r = s.getBoundingClientRect(); const d = Math.abs((r.top+r.bottom)/2 - innerHeight/2); if (d<bd){bd=d; best=s;} }
+  sideTarget = sideFor(best, wide);
+  sideX += (sideTarget-sideX)*k(3);
+
+  const yawTarget = 0.6 + p*Math.PI*2*0.92 + mouse.x*0.55 + t*0.05;
+  yaw += (yawTarget-yaw)*k(4.2);
+  car.rotation.y = yaw;
+  rig.rotation.x = mouse.y*0.06;
+  rig.position.x = sideX;
+  rig.position.y = Math.sin(t*0.9)*0.015;
+
+  const zTarget = (wide?8.8:13) - Math.sin(p*Math.PI)*(wide?1.9:1.6);
+  camZ += (zTarget-camZ)*k(3);
+  camera.position.set(mouse.x*0.5, (wide?1.7:2.6) - mouse.y*0.25 + Math.sin(p*Math.PI)*0.5, camZ);
+  camera.lookAt(sideX*0.2, wide?0.75:-0.1, 0);
+
+  for (const w of wheelGroups) w.rotation.z -= 0.0; // wheels stay still while parked
+  sparks.rotation.y = t*0.02;
+  ring.rotation.z = t*0.05;
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>

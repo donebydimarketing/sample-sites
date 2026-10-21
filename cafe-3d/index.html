@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cafe Concept Sample</title>
+<meta name="description" content="Concept sample: a 3D cafe website. The cup follows your mouse and tilts as you scroll.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f1ef;--fg:#0a0a0a;--mute:#7a7a7a;--line:#d6d6d3}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.tag{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:20;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);background:rgba(241,241,239,.8);border:1px solid var(--line);padding:.4rem .9rem;border-radius:99px;white-space:nowrap}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:3.2rem 6% 1rem}
+.logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.25rem}
+.btn{display:inline-block;background:var(--fg);color:var(--bg);text-decoration:none;font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.95rem 1.7rem;border:1px solid var(--fg);transition:background .25s,color .25s}
+.btn:hover{background:transparent;color:var(--fg)}
+.btn.ghost{background:transparent;color:var(--fg)}
+.btn.ghost:hover{background:var(--fg);color:var(--bg)}
+main{position:relative;z-index:5}
+section{min-height:100vh;display:flex;align-items:center;padding:7rem 6% 5rem}
+.col{max-width:520px}
+section[data-side="left"] .col{margin-right:auto}
+section[data-side="right"] .col{margin-left:auto}
+section[data-side="center"]{justify-content:center;text-align:center}
+section[data-side="center"] .col{max-width:640px}
+.eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mute);margin-bottom:1.1rem}
+h1,h2{font-family:'Playfair Display',serif;font-weight:900;line-height:1.05;letter-spacing:-.01em}
+h1{font-size:clamp(2.8rem,7vw,5.4rem);margin-bottom:1.3rem}
+h2{font-size:clamp(2rem,4.6vw,3.3rem);margin-bottom:1.4rem}
+h1 em,h2 em{font-style:italic;color:var(--mute)}
+p.lead{font-size:1.05rem;color:#3a3a3a;margin-bottom:2rem}
+.row{display:flex;gap:.8rem;flex-wrap:wrap}
+ul.menu{list-style:none;border-top:1px solid var(--line)}
+ul.menu li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);font-size:1.05rem}
+ul.menu li small{color:var(--mute);font-size:.82rem;display:block}
+ul.menu li span{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.facts b{display:block;font-family:'Playfair Display',serif;font-size:1.7rem}
+.facts span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.hours{border:1px solid var(--line);background:rgba(241,241,239,.8);padding:1.3rem 1.5rem;backdrop-filter:blur(6px)}
+.hours div{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.98rem}
+.hours div span:last-child{color:var(--mute)}
+footer{position:relative;z-index:5;padding:2rem 6% 2.4rem;border-top:1px solid var(--line);background:rgba(241,241,239,.94);color:var(--mute);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);transition:opacity .5s}
+@media(max-width:820px){
+  section{align-items:flex-end;padding:6rem 0 3rem}
+  section[data-side="center"]{align-items:center}
+  .col{max-width:none!important;background:linear-gradient(180deg,rgba(241,241,239,0),rgba(241,241,239,.9) 28%);margin:0!important;padding:3rem 6% 0}
+  section[data-side="center"] .col{background:rgba(241,241,239,.7);padding:2rem 6%}
+  .tag{font-size:.54rem}
+  nav{padding-top:3rem}
+}
+</style>
+</head>
+<body>
+<div class="tag">Concept sample &middot; your brand goes here</div>
+<canvas id="gl" aria-label="Interactive 3D coffee cup that follows your cursor"></canvas>
+
+<nav>
+  <div class="logo">Your Cafe</div>
+  <a class="btn" href="#visit">Visit us</a>
+</nav>
+
+<main>
+  <section data-side="left" id="top">
+    <div class="col">
+      <div class="eyebrow">Coffee &amp; bakery</div>
+      <h1>Slow mornings. <em>Good coffee.</em></h1>
+      <p class="lead">Small batch roasts, fresh pastries and a quiet table by the window. Come in for one cup. Stay for two.</p>
+      <div class="row">
+        <a class="btn" href="#menu">See the menu</a>
+        <a class="btn ghost" href="#visit">Find us</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="right" id="menu">
+    <div class="col">
+      <div class="eyebrow">The menu</div>
+      <h2>Made fresh, <em>every day.</em></h2>
+      <ul class="menu">
+        <li><div>House latte<small>Espresso, steamed milk</small></div><span>Hot or iced</span></li>
+        <li><div>Pour over<small>Single origin, brewed by hand</small></div><span>Daily pick</span></li>
+        <li><div>Butter croissant<small>Baked every morning</small></div><span>Pastry</span></li>
+        <li><div>Avocado toast<small>Sourdough, lemon, chili</small></div><span>Brunch</span></li>
+        <li><div>Cold brew<small>Steeped for 18 hours</small></div><span>Iced</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-side="left" id="story">
+    <div class="col">
+      <div class="eyebrow">Our story</div>
+      <h2>A corner for <em>your neighborhood.</em></h2>
+      <p class="lead">We started with one grinder and a simple idea. Make a place where people actually want to sit down. We roast in small batches and bake before sunrise.</p>
+      <div class="facts">
+        <div><b>6am</b><span>Doors open</span></div>
+        <div><b>12</b><span>Beans on rotation</span></div>
+        <div><b>100%</b><span>Made in house</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="center" id="visit">
+    <div class="col">
+      <div class="eyebrow">Visit us</div>
+      <h2>Your table is <em>waiting.</em></h2>
+      <div class="hours" style="margin:0 auto 2rem;max-width:380px;text-align:left">
+        <div><span>Monday to Friday</span><span>6am to 6pm</span></div>
+        <div><span>Saturday</span><span>7am to 5pm</span></div>
+        <div><span>Sunday</span><span>7am to 3pm</span></div>
+      </div>
+      <div class="row" style="justify-content:center">
+        <a class="btn" href="#">Get directions</a>
+        <a class="btn ghost" href="#">Order ahead</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>Concept sample website. Your logo, name and details go here.</footer>
+<div class="hint" id="hint">Move your mouse. Scroll to tilt the cup.</div>
+
+<script type="importmap">{"imports":{"three":"../vendor/three.module.min.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const BG = 0xf1f1ef;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(BG);
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
+
+/* Soft studio light for reflections */
+(function(){
+  const env = new THREE.Scene();
+  env.add(new THREE.Mesh(new THREE.BoxGeometry(30,16,30), new THREE.MeshBasicMaterial({color:0xcfcfcf, side:THREE.BackSide})));
+  const panel=(w,h,x,y,z,ry,rx,k)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color().setScalar(k),side:THREE.DoubleSide}));m.position.set(x,y,z);m.rotation.y=ry||0;m.rotation.x=rx||0;env.add(m);};
+  panel(14,4,0,7.5,0,0,Math.PI/2,5);
+  panel(3,9,-11,3,0,Math.PI/2,0,3);
+  panel(3,9,11,3,0,Math.PI/2,0,3);
+  const pm = new THREE.PMREMGenerator(renderer);
+  scene.environment = pm.fromScene(env,0.03).texture;
+  pm.dispose();
+})();
+
+const key = new THREE.DirectionalLight(0xffffff, 2.0);
+key.position.set(3,8,4);
+key.castShadow = true;
+key.shadow.mapSize.set(2048,2048);
+key.shadow.camera.left=-5; key.shadow.camera.right=5; key.shadow.camera.top=5; key.shadow.camera.bottom=-5;
+key.shadow.camera.near=1; key.shadow.camera.far=20;
+key.shadow.radius = 6; key.shadow.bias = -0.0004;
+scene.add(key);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.ShadowMaterial({opacity:0.22}));
+ground.rotation.x = -Math.PI/2; ground.receiveShadow = true;
+scene.add(ground);
+
+/* The cup. An original design, drawn with a lathe. */
+const cup = new THREE.Group();
+const porcelain = new THREE.MeshPhysicalMaterial({color:0xfafafa, roughness:0.18, metalness:0, clearcoat:1, clearcoatRoughness:0.08, side:THREE.DoubleSide});
+const dark = new THREE.MeshPhysicalMaterial({color:0x111111, roughness:0.2, clearcoat:1});
+
+const cp = [
+  [0.0,0.0],[0.45,0.0],[0.56,0.03],[0.62,0.1],[0.8,0.55],[0.98,1.0],[1.02,1.1],[1.0,1.14],
+  [0.94,1.12],[0.9,1.02],[0.74,0.62],[0.56,0.2],[0.0,0.17]
+].map(([r,y])=>new THREE.Vector2(r,y));
+const cupMesh = new THREE.Mesh(new THREE.LatheGeometry(cp, 96), porcelain);
+cupMesh.castShadow = true; cupMesh.receiveShadow = true;
+cup.add(cupMesh);
+
+// handle
+const handle = new THREE.Mesh(new THREE.TorusGeometry(0.34,0.07,20,48,Math.PI), porcelain);
+handle.rotation.z = -Math.PI/2;
+handle.position.set(0.88,0.6,0);
+handle.castShadow = true;
+cup.add(handle);
+
+// coffee surface with a simple milk heart
+const cv = document.createElement('canvas'); cv.width = cv.height = 512;
+const g = cv.getContext('2d');
+g.fillStyle = '#141414'; g.fillRect(0,0,512,512);
+g.translate(256,270);
+g.fillStyle = '#ececec';
+g.beginPath();
+g.moveTo(0,150);
+g.bezierCurveTo(-210,10,-150,-170,0,-70);
+g.bezierCurveTo(150,-170,210,10,0,150);
+g.fill();
+g.strokeStyle = '#141414'; g.lineWidth = 9;
+for (let i=0;i<5;i++){ g.beginPath(); g.moveTo(0,-62+i*0); g.lineTo(0,140-i*0); }
+g.beginPath(); g.moveTo(0,-60); g.lineTo(0,130); g.stroke();
+const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+const coffee = new THREE.Mesh(new THREE.CircleGeometry(0.915,64), new THREE.MeshPhysicalMaterial({map:tex, roughness:0.25, clearcoat:0.6}));
+coffee.rotation.x = -Math.PI/2; coffee.position.y = 1.0;
+cup.add(coffee);
+
+// saucer
+const sp = [[0,0],[1.0,0],[1.45,0.1],[1.62,0.2],[1.66,0.24],[1.62,0.25],[1.44,0.17],[0.95,0.08],[0,0.07]].map(([r,y])=>new THREE.Vector2(r,y));
+const saucer = new THREE.Mesh(new THREE.LatheGeometry(sp,96), porcelain);
+saucer.castShadow = true; saucer.receiveShadow = true;
+scene.add(saucer);
+cup.position.y = 0.07;
+
+const rig = new THREE.Group();
+rig.add(cup); rig.add(saucer);
+rig.position.y = 0;
+scene.add(rig);
+
+/* Steam */
+const puff = (()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');const gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(120,120,120,0.55)');gr.addColorStop(1,'rgba(120,120,120,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c);})();
+const steam = [];
+for (let i=0;i<34;i++){
+  const m = new THREE.SpriteMaterial({map:puff, transparent:true, opacity:0, depthWrite:false});
+  const s = new THREE.Sprite(m);
+  s.userData = {age: Math.random(), speed: 0.12+Math.random()*0.1, ox:(Math.random()-.5)*0.6, oz:(Math.random()-.5)*0.6, ph:Math.random()*6.28};
+  cup.add(s); steam.push(s);
+}
+
+/* Coffee beans floating around */
+const beanGeo = new THREE.SphereGeometry(0.16,24,16);
+const beanMat = new THREE.MeshStandardMaterial({color:0x1a1a1a, roughness:0.45});
+const beans = [];
+for (let i=0;i<9;i++){
+  const b = new THREE.Mesh(beanGeo, beanMat);
+  b.scale.set(1,0.62,0.72);
+  b.castShadow = true;
+  const a = Math.random()*Math.PI*2, r = 3.4+Math.random()*1.8;
+  b.userData = {a, r, y:0.4+Math.random()*3.2, sp:0.05+Math.random()*0.12, spin:new THREE.Vector3(Math.random(),Math.random(),Math.random()).multiplyScalar(0.8)};
+  scene.add(b); beans.push(b);
+}
+
+/* Input */
+const mouse = {x:0,y:0,tx:0,ty:0};
+addEventListener('pointermove', e=>{ mouse.tx=(e.clientX/innerWidth)*2-1; mouse.ty=(e.clientY/innerHeight)*2-1; hideHint(); });
+addEventListener('pointerleave', ()=>{mouse.tx=0;mouse.ty=0;});
+let gone=false; function hideHint(){ if(gone) return; gone=true; document.getElementById('hint').style.opacity=0; }
+addEventListener('scroll', ()=>{ if(scrollY>40) hideHint(); },{passive:true});
+
+const sections = [...document.querySelectorAll('main section')];
+let wide = true;
+function resize(){
+  const w=innerWidth,h=innerHeight;
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  wide = w/h > 1.1;
+}
+addEventListener('resize', resize); resize();
+
+let sideX=0, yaw=0, tilt=0, camZ=9, last=performance.now();
+const clock = new THREE.Clock();
+function tick(){
+  const t = clock.getElapsedTime();
+  const now = performance.now(); const dt = Math.min((now-last)/1000, 0.1); last = now;
+  const k = r => 1-Math.exp(-dt*r);
+  mouse.x += (mouse.tx-mouse.x)*k(4.2);
+  mouse.y += (mouse.ty-mouse.y)*k(4.2);
+
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max>0 ? Math.min(Math.max(scrollY/max,0),1) : 0;
+
+  let best=sections[0], bd=1e9;
+  for (const s of sections){ const r=s.getBoundingClientRect(); const d=Math.abs((r.top+r.bottom)/2-innerHeight/2); if(d<bd){bd=d;best=s;} }
+  const sd = best.dataset.side;
+  const target = wide ? (sd==='left'?2.7: sd==='right'?-2.7:0) : 0;
+  sideX += (target-sideX)*k(3);
+
+  const yawT = p*Math.PI*2*1.1 + mouse.x*0.7;
+  yaw += (yawT-yaw)*k(4.2);
+  cup.rotation.y = yaw;
+  saucer.rotation.y = yaw*0.5;
+
+  // scroll tips the cup toward the camera, mouse adds a little more
+  const tiltT = Math.sin(p*Math.PI)*0.45 + mouse.y*0.25;
+  tilt += (tiltT-tilt)*k(4.2);
+  rig.rotation.x = tilt;
+  rig.position.x = sideX;
+  rig.position.y = Math.sin(t*0.8)*0.03;
+
+  const zT = (wide?9.4:12) - Math.sin(p*Math.PI)*1.6;
+  camZ += (zT-camZ)*k(3);
+  camera.position.set(mouse.x*0.4, (wide?4.3:5.4) - mouse.y*0.3, camZ);
+  camera.lookAt(sideX*0.3, wide?0.6:0.1, 0);
+
+  // steam
+  for (const s of steam){
+    const d = s.userData;
+    d.age += 0.0045 + d.speed*0.012;
+    if (d.age>1) d.age = 0;
+    const a = d.age;
+    s.position.set(d.ox*(0.3+a) + Math.sin(t*1.1+d.ph+a*5)*0.14*a, 1.0 + a*1.5, d.oz*(0.3+a) + Math.cos(t*0.9+d.ph)*0.1*a);
+    const sc = 0.4 + a*1.1;
+    s.scale.set(sc,sc,1);
+    s.material.opacity = Math.sin(a*Math.PI)*0.38;
+  }
+
+  for (const b of beans){
+    const d=b.userData;
+    d.a += d.sp*0.004;
+    const k = 1 + mouse.x*0.0;
+    b.position.set(Math.cos(d.a)*d.r*k + sideX*0.4 + mouse.x*0.3*(d.y*0.3), d.y + Math.sin(t*0.7+d.a*3)*0.12 - mouse.y*0.15, Math.sin(d.a)*d.r*0.6 - 1.2);
+    b.rotation.x += d.spin.x*0.01; b.rotation.y += d.spin.y*0.01; b.rotation.z += d.spin.z*0.01;
+  }
+
+  renderer.render(scene,camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
