@@ -120,6 +120,25 @@ section.pad{padding:5rem 0}
 .cups svg{width:100%;height:auto}
 .cups .cap{grid-column:1/-1;text-align:center;font-family:var(--mono);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--forest);margin-top:.3rem}
 
+/* owner */
+.owner{background:var(--pink-l);border-top:2px solid var(--forest)}
+.ownergrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:2.4rem;align-items:start}
+.ownercard{position:sticky;top:92px;background:var(--cream);border:2px solid var(--forest);border-radius:24px;box-shadow:6px 6px 0 var(--forest);padding:1.8rem;text-align:center}
+.stamp{width:150px;height:150px;margin:0 auto 1.2rem;border-radius:50%;background:var(--green);border:3px solid var(--forest);box-shadow:5px 5px 0 var(--pink);display:grid;place-items:center;overflow:hidden;font-family:var(--display);font-size:4rem;color:var(--pink);text-shadow:3px 3px 0 var(--forest)}
+.stamp img{width:100%;height:100%;object-fit:cover}
+.ownercard h3{font-size:2rem}
+.ownercard .role{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin:.3rem 0 .9rem}
+.chips{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem}
+.chips span{font-family:var(--mono);font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:2px solid var(--forest);border-radius:99px;padding:.15rem .7rem;background:var(--mint)}
+.ownercard blockquote{font-family:var(--serif);font-style:italic;font-weight:700;font-size:1.35rem;line-height:1.3;border-top:2px dashed var(--line);padding-top:1.1rem}
+.story{list-style:none;position:relative;display:grid;gap:1.1rem}
+.story::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:3px;background:var(--forest);border-radius:2px}
+.story li{position:relative;display:grid;grid-template-columns:40px 1fr;gap:1.1rem;align-items:start}
+.story .n{width:40px;height:40px;border-radius:50%;background:var(--pink);border:2px solid var(--forest);display:grid;place-items:center;font-family:var(--display);position:relative;z-index:1}
+.story li>div{background:var(--cream);border:2px solid var(--forest);border-radius:18px;box-shadow:4px 4px 0 var(--forest);padding:1rem 1.2rem}
+.story h4{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.1;margin-bottom:.3rem}
+.story p{font-size:.98rem}
+
 /* instagram */
 .ig{background:var(--green);border-block:2px solid var(--forest)}
 .igcard{background:var(--cream);border:2px solid var(--forest);border-radius:24px;box-shadow:6px 6px 0 var(--forest);padding:1.5rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.6rem;align-items:center;margin-bottom:1.6rem}
@@ -243,7 +262,8 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 
 @media(max-width:900px){
   .links{display:none}
-  .hero .wrap,.about .wrap,.ordergrid,.contact .wrap,footer .wrap{grid-template-columns:1fr}
+  .hero .wrap,.about .wrap,.ordergrid,.contact .wrap,footer .wrap,.ownergrid{grid-template-columns:1fr}
+  .ownercard{position:static}
   .stage{margin:0 auto}
   #igGrid{grid-template-columns:repeat(2,1fr)}
   .igcard{grid-template-columns:auto minmax(0,1fr)}
@@ -280,6 +300,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     <ul class="links">
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="#owner">The Owner</a></li>
       <li><a href="#instagram">Instagram</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -298,7 +319,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
         <a class="btn" href="#instagram">See our feed</a>
       </div>
       <div class="stats">
-        <div><b>3+</b><span>Years whisking</span></div>
+        <div><b>3+</b><span>Years in coffee and matcha</span></div>
         <div><b>5</b><span>Days a week</span></div>
         <div><b>769</b><span>Followers</span></div>
       </div>
@@ -328,7 +349,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     <div>
       <div class="eyebrow">About the club</div>
       <h2>A club for people who <em class="s">love good matcha.</em></h2>
-      <p>We have been whisking for over three years. We keep it simple. Good matcha, fresh fruit and a cold glass. You do not need to be a matcha expert to enjoy it.</p>
+      <p>Our story started with coffee more than three years ago. Then it turned into matcha. We keep it simple. Good matcha, fresh fruit and a cold glass. You do not need to be a matcha expert to enjoy it.</p>
       <ul>
         <li>Every cup is whisked fresh</li>
         <li>Curated whims, fresh fruity flavors, just for you</li>
@@ -338,6 +359,32 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
       <a class="btn pink" href="#contact">Book an event</a>
     </div>
     <div class="cups" id="aboutCups" aria-hidden="true"><div class="cap">The Matcha Trio</div></div>
+  </div>
+</section>
+
+<section class="pad owner" id="owner">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">About the owner</div>
+      <h2>Meet Christina. <em class="s">She did it scared.</em></h2>
+    </div>
+    <div class="ownergrid">
+      <aside class="ownercard">
+        <div class="stamp" id="ownerPhoto"><span>C</span></div>
+        <h3>Christina</h3>
+        <div class="role">Founder, Our Matcha Club</div>
+        <div class="chips"><span>Small cafe</span><span>Matcha</span><span>Art</span></div>
+        <blockquote>Sometimes the best things happen when you do them scared.</blockquote>
+      </aside>
+      <ol class="story">
+        <li><span class="n">1</span><div><h4>Coffee first</h4><p>Christina moved to the States to be with family. She brought her love for coffee to a job as a barista.</p></div></li>
+        <li><span class="n">2</span><div><h4>Back home</h4><p>She came home and worked in the corporate world. She is a graphic artist by profession.</p></div></li>
+        <li><span class="n">3</span><div><h4>A coffee side hustle</h4><p>Her passion for coffee led to bottled cold brew and a sandwich. She sold them at pop-up booths at local events and festivals.</p></div></li>
+        <li><span class="n">4</span><div><h4>Matcha took over</h4><p>Coffee pop-ups were everywhere, but nobody in her neighborhood served just matcha. So she switched to matcha, and Our Matcha Club was born. She was still working full time.</p></div></li>
+        <li><span class="n">5</span><div><h4>Version 1, 2 and 3</h4><p>The pop-up kept changing as the club grew. Each version taught her what people love.</p></div></li>
+        <li><span class="n">6</span><div><h4>A home for the club</h4><p>After years in corporate, she quit her job to build a permanent home for Our Matcha Club. A little green corner for a peaceful cup of no drama, just good good matcha.</p></div></li>
+      </ol>
+    </div>
   </div>
 </section>
 
@@ -447,7 +494,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     </div>
     <div>
       <h4>Explore</h4>
-      <ul><li><a href="#menu">Menu</a></li><li><a href="#about">About</a></li><li><a href="#instagram">Instagram</a></li><li><a href="#contact">Contact</a></li></ul>
+      <ul><li><a href="#menu">Menu</a></li><li><a href="#about">About</a></li><li><a href="#owner">The Owner</a></li><li><a href="#instagram">Instagram</a></li><li><a href="#contact">Contact</a></li></ul>
     </div>
     <div>
       <h4>Open</h4>
@@ -478,6 +525,9 @@ const ORDER_ENDPOINT = '';
 // To show the live Instagram feed, create a free feed at behold.so and paste its feed ID here.
 const BEHOLD_FEED_ID = '';
 const IG_URL = 'https://www.instagram.com/ourmatchaclub/';
+// To show the owner's photo, put the image in this folder (for example christina.jpg) and type its file name here.
+const OWNER_PHOTO = '';
+if(OWNER_PHOTO){ const s = document.getElementById('ownerPhoto'); s.innerHTML = ''; const im = document.createElement('img'); im.src = OWNER_PHOTO; im.alt = 'Christina, owner of Our Matcha Club'; s.appendChild(im); }
 const FREE_DELIVERY_OVER = 600, DELIVERY_FEE = 49;
 
 /* ---------- drink art ---------- */
