@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Matcha Club</title>
+<meta name="description" content="Our Matcha Club. Fresh iced matcha, made your way. Concept sample with an interactive 3D iced matcha.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9efdc;--fg:#101a08;--mute:#69795a;--line:#cbd6b6;--accent:#4f7a1f}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.tag{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:20;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);background:rgba(233,239,220,.85);border:1px solid var(--line);padding:.4rem .9rem;border-radius:99px;white-space:nowrap}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:3.2rem 6% 1rem}
+.logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;letter-spacing:.02em;text-transform:uppercase}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.95rem 1.7rem;border:1px solid var(--accent);transition:background .25s,color .25s,border-color .4s}
+.btn:hover{background:transparent;color:var(--accent)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.ghost:hover{background:var(--accent);color:#fff}
+main{position:relative;z-index:5}
+section{min-height:100vh;display:flex;align-items:center;padding:7rem 6% 5rem}
+.col{max-width:520px}
+section[data-side="left"] .col{margin-right:auto}
+section[data-side="right"] .col{margin-left:auto}
+section[data-side="center"]{justify-content:center;text-align:center}
+section[data-side="center"] .col{max-width:640px}
+.eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);margin-bottom:1.1rem;transition:color .4s}
+h1,h2{font-family:'Playfair Display',serif;font-weight:900;line-height:1.05;letter-spacing:-.01em}
+h1{font-size:clamp(2.8rem,7vw,5.4rem);margin-bottom:1.3rem}
+h2{font-size:clamp(2rem,4.6vw,3.3rem);margin-bottom:1.4rem}
+h1 em,h2 em{font-style:italic;color:var(--accent);transition:color .4s}
+p.lead{font-size:1.05rem;color:#34422a;margin-bottom:2rem}
+.row{display:flex;gap:.8rem;flex-wrap:wrap}
+ul.menu{list-style:none;border-top:1px solid var(--line)}
+ul.menu li{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);font-size:1.05rem}
+ul.menu li small{color:var(--mute);font-size:.82rem;display:block}
+ul.menu li span{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.facts b{display:block;font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--accent);transition:color .4s}
+.facts span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.hours{border:1px solid var(--line);background:rgba(233,239,220,.8);padding:1.3rem 1.5rem;backdrop-filter:blur(6px)}
+.hours div{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.98rem}
+.hours div span:last-child{color:var(--mute)}
+footer{position:relative;z-index:5;padding:2rem 6% 2.4rem;border-top:1px solid var(--line);background:rgba(233,239,220,.95);color:var(--mute);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.sw{position:fixed;right:18px;bottom:18px;z-index:20;display:flex;align-items:center;gap:.55rem;background:rgba(233,239,220,.85);border:1px solid var(--line);padding:.55rem .8rem;border-radius:99px;backdrop-filter:blur(6px)}
+.sw span{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-right:.2rem}
+.sw button{width:22px;height:22px;border-radius:50%;border:2px solid #fff;cursor:pointer;padding:0;transition:transform .2s,box-shadow .2s;box-shadow:0 0 0 1px var(--line)}
+.sw button:hover{transform:scale(1.15)}
+.sw button.on{box-shadow:0 0 0 2px var(--fg)}
+.hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:9;font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mute);transition:opacity .5s}
+@media(max-width:820px){
+  section{align-items:flex-end;padding:6rem 0 3rem}
+  section[data-side="center"]{align-items:center}
+  .col{max-width:none!important;background:linear-gradient(180deg,rgba(233,239,220,0),rgba(233,239,220,.92) 28%);margin:0!important;padding:3rem 6% 0}
+  section[data-side="center"] .col{background:rgba(233,239,220,.72);padding:2rem 6%}
+  .tag{font-size:.54rem}
+  nav{padding-top:3rem}
+  .logo{font-size:.95rem;white-space:nowrap}
+  nav .btn{padding:.8rem 1.1rem;font-size:.64rem;white-space:nowrap}
+  .sw{right:50%;transform:translateX(50%);bottom:10px;padding:.4rem .7rem}
+  .sw span{display:none}
+  .hint{display:none}
+}
+</style>
+</head>
+<body>
+<div class="tag">Concept sample &middot; your brand goes here</div>
+<canvas id="gl" aria-label="Interactive 3D iced matcha that follows your cursor"></canvas>
+
+<nav>
+  <div class="logo">Our Matcha Club</div>
+  <a class="btn" href="#visit">Join the club</a>
+</nav>
+
+<main>
+  <section data-side="left" id="top">
+    <div class="col">
+      <div class="eyebrow">Iced matcha bar</div>
+      <h1>Cold. Green. <em>Yours.</em></h1>
+      <p class="lead">Fresh whisked matcha poured over ice. Pick your milk. Pick your sweetness. Then pick your favorite spot in the club.</p>
+      <div class="row">
+        <a class="btn" href="#menu">See the menu</a>
+        <a class="btn ghost" href="#visit">Find us</a>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="right" id="menu">
+    <div class="col">
+      <div class="eyebrow">The menu</div>
+      <h2>Always iced, <em>always fresh.</em></h2>
+      <ul class="menu">
+        <li><div>Classic iced matcha<small>Matcha, ice, your choice of milk</small></div><span>Iced</span></li>
+        <li><div>Strawberry matcha<small>Strawberry milk under bright green matcha</small></div><span>Iced</span></li>
+        <li><div>Blueberry matcha<small>Blueberry cream, matcha on top</small></div><span>Iced</span></li>
+        <li><div>Vanilla cold foam matcha<small>Sweet cream foam, soft and smooth</small></div><span>Iced</span></li>
+        <li><div>Honey oat matcha<small>Oat milk, a drizzle of honey</small></div><span>Iced</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-side="left" id="story">
+    <div class="col">
+      <div class="eyebrow">The club</div>
+      <h2>A club for <em>matcha people.</em></h2>
+      <p class="lead">We started with one simple idea. Iced matcha should taste fresh and look as good as it tastes. We whisk every cup to order and pour it over clear ice. Come in, sip slow and bring a friend.</p>
+      <div class="facts">
+        <div><b>5</b><span>Milk choices</span></div>
+        <div><b>3</b><span>Sweetness levels</span></div>
+        <div><b>100%</b><span>Real matcha</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-side="center" id="visit">
+    <div class="col">
+      <div class="eyebrow">Visit us</div>
+      <h2>Your seat is <em>waiting.</em></h2>
+      <div class="hours" style="margin:0 auto 2rem;max-width:380px;text-align:left">
+        <div><span>Monday to Friday</span><span>7am to 6pm</span></div>
+        <div><span>Saturday</span><span>8am to 6pm</span></div>
+        <div><span>Sunday</span><span>8am to 3pm</span></div>
+      </div>
+      <div class="row" style="justify-content:center">
+        <a class="btn" href="#">Order ahead</a>
+        <a class="btn ghost" href="#">Get directions</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>Concept sample website. Your logo, name and details go here.</footer>
+<div class="sw" id="sw"><span>Flavor</span></div>
+<div class="hint" id="hint">Move your mouse. Scroll to turn the glass. Tap a flavor.</div>
+
+<script type="importmap">{"imports":{"three":"../vendor/three.module.min.js","three/addons/":"../vendor/addons/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const BG = 0xe9efdc;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(BG);
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
+
+{
+  const pm = new THREE.PMREMGenerator(renderer);
+  scene.environment = pm.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  pm.dispose();
+}
+scene.environmentIntensity = 1.1;
+
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(4,9,5);
+key.castShadow = true;
+key.shadow.mapSize.set(2048,2048);
+key.shadow.camera.left=-5; key.shadow.camera.right=5; key.shadow.camera.top=6; key.shadow.camera.bottom=-4;
+key.shadow.camera.near=1; key.shadow.camera.far=24;
+key.shadow.radius = 7; key.shadow.bias = -0.0004;
+scene.add(key);
+const rimL = new THREE.DirectionalLight(0xffffff, 1.4);
+rimL.position.set(-6,4,-5); scene.add(rimL);
+scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.ShadowMaterial({opacity:0.2}));
+ground.rotation.x = -Math.PI/2; ground.receiveShadow = true;
+scene.add(ground);
+
+/* ---------- Iced matcha: glass, layered drink, ice, straw, droplets ---------- */
+const H = 2.3, LH = 1.95;
+const rOut = y => 0.66 + (0.80-0.66)*(y-0.03)/(H-0.03);
+const rIn  = y => 0.60 + (0.74-0.60)*(y-0.20)/(H-0.20);
+const rig = new THREE.Group();
+scene.add(rig);
+const drink = new THREE.Group();   // everything that sits on the coaster
+rig.add(drink);
+
+// coaster
+const coaster = new THREE.Mesh(new THREE.CylinderGeometry(1.35,1.4,0.07,96),
+  new THREE.MeshStandardMaterial({color:0xf4f4ee, roughness:0.55, metalness:0}));
+coaster.position.y = -0.035; coaster.receiveShadow = true; coaster.castShadow = true;
+rig.add(coaster);
+
+// glass
+const glassPts = [[0,0],[0.6,0],[0.66,0.03],[0.8,H],[0.74,H],[0.6,0.2],[0,0.2]].map(([r,y])=>new THREE.Vector2(r,y));
+const glassMat = new THREE.MeshPhysicalMaterial({
+  color:0xffffff, metalness:0, roughness:0.02, transparent:true, opacity:0.16,
+  clearcoat:1, clearcoatRoughness:0.02, ior:1.5, specularIntensity:1, envMapIntensity:1.8, depthWrite:false, side:THREE.DoubleSide
+});
+const glass = new THREE.Mesh(new THREE.LatheGeometry(glassPts, 128), glassMat);
+glass.renderOrder = 3;
+drink.add(glass);
+
+// layered liquid
+function liquidTex(bottomHex, midHex){
+  const c = document.createElement('canvas'); c.width = 256; c.height = 512;
+  const g = c.getContext('2d');
+  const gr = g.createLinearGradient(0,512,0,0);
+  gr.addColorStop(0.00, bottomHex);
+  gr.addColorStop(0.30, bottomHex);
+  gr.addColorStop(0.52, midHex);
+  gr.addColorStop(0.70, '#6f9f22');
+  gr.addColorStop(1.00, '#3f7410');
+  g.fillStyle = gr; g.fillRect(0,0,256,512);
+  // soft wisps where the green swirls into the milk
+  for (let i=0;i<46;i++){
+    const x = Math.random()*256, y = 120 + Math.random()*210;
+    const w = 6 + Math.random()*26, h = 30 + Math.random()*90;
+    const gg = g.createLinearGradient(x,y,x,y+h);
+    const green = Math.random()<0.6;
+    gg.addColorStop(0, green?'rgba(110,160,40,0.0)':'rgba(255,255,255,0.0)');
+    gg.addColorStop(0.5, green?'rgba(110,160,40,0.35)':'rgba(255,255,255,0.28)');
+    gg.addColorStop(1, green?'rgba(110,160,40,0.0)':'rgba(255,255,255,0.0)');
+    g.fillStyle = gg; g.beginPath(); g.ellipse(x,y+h/2,w,h/2,0,0,6.283); g.fill();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; t.anisotropy = 8;
+  return t;
+}
+const FLAVORS = [
+  ['Classic',        '#f4f1e0','#b4cf6a','#4f7a1f'],
+  ['Strawberry',     '#f29ab0','#c4cf7e','#d9577b'],
+  ['Blueberry',      '#8f8ae0','#a8c476','#5a54b8']
+];
+const liqBottomR = rIn(0.2)-0.012, liqTopR = rIn(LH)-0.012;
+const liquidMat = new THREE.MeshPhysicalMaterial({map:liquidTex(FLAVORS[0][1],FLAVORS[0][2]), roughness:0.28, metalness:0, clearcoat:0.5, clearcoatRoughness:0.2});
+const liquid = new THREE.Mesh(new THREE.CylinderGeometry(liqTopR, liqBottomR, LH-0.2, 96, 1, true), liquidMat);
+liquid.position.y = (0.2+LH)/2; liquid.castShadow = true;
+drink.add(liquid);
+const liquidBase = new THREE.Mesh(new THREE.CircleGeometry(liqBottomR,64), new THREE.MeshStandardMaterial({color:0xf4f1e0, roughness:0.4}));
+liquidBase.rotation.x = -Math.PI/2; liquidBase.position.y = 0.21; drink.add(liquidBase);
+
+// top surface with a little foam speckle
+const tc = document.createElement('canvas'); tc.width = tc.height = 512;
+const tg = tc.getContext('2d');
+const tr = tg.createRadialGradient(256,256,10,256,256,256);
+tr.addColorStop(0,'#74a026'); tr.addColorStop(0.75,'#5c8d1c'); tr.addColorStop(1,'#3f7410');
+tg.fillStyle = tr; tg.fillRect(0,0,512,512);
+for (let i=0;i<1400;i++){
+  const a=Math.random()*6.283, r=Math.sqrt(Math.random())*250;
+  tg.fillStyle = `rgba(210,235,150,${0.15+Math.random()*0.3})`;
+  tg.beginPath(); tg.arc(256+Math.cos(a)*r,256+Math.sin(a)*r,1+Math.random()*3,0,6.283); tg.fill();
+}
+const topTex = new THREE.CanvasTexture(tc); topTex.colorSpace = THREE.SRGBColorSpace;
+const topMat = new THREE.MeshPhysicalMaterial({map:topTex, roughness:0.3, clearcoat:0.6, clearcoatRoughness:0.15});
+const top = new THREE.Mesh(new THREE.CircleGeometry(liqTopR,64), topMat);
+top.rotation.x = -Math.PI/2; top.position.y = LH; drink.add(top);
+
+// ice cubes
+const iceMat = new THREE.MeshPhysicalMaterial({
+  color:0xeaf6ff, metalness:0, roughness:0.12, transparent:true, opacity:0.55, clearcoat:1, clearcoatRoughness:0.05,
+  ior:1.31, specularIntensity:1, envMapIntensity:1.6, depthWrite:false
+});
+const iceGeo = new RoundedBoxGeometry(0.5,0.5,0.5,5,0.07);
+const ice = [];
+const icePos = [[-0.28,0.02,0.1],[0.22,0.1,-0.18],[0.12,0.0,0.3],[-0.12,0.14,-0.3],[0.34,-0.05,0.14]];
+icePos.forEach(([x,dy,z],i)=>{
+  const m = new THREE.Mesh(iceGeo, iceMat);
+  m.position.set(x, LH+dy, z);
+  m.rotation.set(Math.random()*1.2, Math.random()*3, Math.random()*1.2);
+  m.renderOrder = 2;
+  m.userData = {base:m.position.y, ph:Math.random()*6.28, sx:(Math.random()-.5)*0.3};
+  drink.add(m); ice.push(m);
+});
+// ice below the surface, seen through the glass
+for (let i=0;i<4;i++){
+  const m = new THREE.Mesh(iceGeo, iceMat);
+  const a = Math.random()*6.283, r = Math.random()*0.35;
+  m.position.set(Math.cos(a)*r, 1.25+Math.random()*0.5, Math.sin(a)*r);
+  m.rotation.set(Math.random()*3, Math.random()*3, Math.random()*3);
+  m.scale.setScalar(0.9);
+  m.renderOrder = 2;
+  drink.add(m);
+}
+
+// paper straw
+const sc = document.createElement('canvas'); sc.width = 128; sc.height = 128;
+const sg = sc.getContext('2d');
+sg.fillStyle = '#f6f6ef'; sg.fillRect(0,0,128,128);
+sg.fillStyle = '#6f9a27';
+for (let i=-2;i<8;i++){ sg.beginPath(); sg.moveTo(i*32,0); sg.lineTo(i*32+16,0); sg.lineTo(i*32+16+128,128); sg.lineTo(i*32+128,128); sg.fill(); }
+const strawTex = new THREE.CanvasTexture(sc); strawTex.colorSpace = THREE.SRGBColorSpace;
+strawTex.wrapS = strawTex.wrapT = THREE.RepeatWrapping; strawTex.repeat.set(2,7);
+const straw = new THREE.Group();
+const strawMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.075,3.0,32,1,true), new THREE.MeshStandardMaterial({map:strawTex, roughness:0.7, side:THREE.DoubleSide}));
+strawMesh.position.y = 1.5; strawMesh.castShadow = true;
+straw.add(strawMesh);
+straw.position.set(0.18,0.26,-0.08);
+straw.rotation.set(0.07,0,-0.12);
+drink.add(straw);
+
+// condensation droplets on the outside of the glass
+const dropCount = 170;
+const drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1,14,10),
+  new THREE.MeshPhysicalMaterial({color:0xffffff, roughness:0.0, metalness:0, transparent:true, opacity:0.5, clearcoat:1, envMapIntensity:2.2, depthWrite:false}), dropCount);
+const dummy = new THREE.Object3D();
+for (let i=0;i<dropCount;i++){
+  const y = 0.25 + Math.random()*(H-0.45);
+  const a = Math.random()*Math.PI*2;
+  const r = rOut(y) + 0.004;
+  dummy.position.set(Math.cos(a)*r, y, Math.sin(a)*r);
+  dummy.lookAt(dummy.position.x*2, y, dummy.position.z*2);
+  const s = 0.012 + Math.pow(Math.random(),2.2)*0.034;
+  const stretch = Math.random()<0.2 ? 2.6 : 1.25;
+  dummy.scale.set(s, s*stretch, s*0.42);
+  dummy.updateMatrix(); drops.setMatrixAt(i, dummy.matrix);
+}
+drops.renderOrder = 4;
+drink.add(drops);
+
+// floating matcha leaves
+const leafGeo = new THREE.SphereGeometry(0.2,24,12);
+const leafMat = new THREE.MeshStandardMaterial({color:0x5f9a22, roughness:0.55});
+const leaves = [];
+for (let i=0;i<7;i++){
+  const b = new THREE.Mesh(leafGeo, leafMat);
+  b.scale.set(1.5,0.1,0.65); b.castShadow = true;
+  const a = Math.random()*Math.PI*2, r = 3.4+Math.random()*1.8;
+  b.userData = {a, r, y:0.5+Math.random()*3.4, sp:0.05+Math.random()*0.12, spin:new THREE.Vector3(Math.random(),Math.random(),Math.random()).multiplyScalar(0.8)};
+  scene.add(b); leaves.push(b);
+}
+
+/* Flavor picker */
+const SW_UI = ['#4f7a1f','#d9577b','#5a54b8'];
+const sw = document.getElementById('sw');
+FLAVORS.forEach(([name,bot,mid,ui],i)=>{
+  const b = document.createElement('button');
+  b.title = name; b.setAttribute('aria-label', name+' flavor');
+  b.style.background = `linear-gradient(180deg, #6f9a27 0 45%, ${bot} 45% 100%)`;
+  if(i===0) b.className = 'on';
+  b.addEventListener('click', ()=>{
+    const old = liquidMat.map; liquidMat.map = liquidTex(bot, mid); liquidMat.needsUpdate = true; old.dispose();
+    document.documentElement.style.setProperty('--accent', ui);
+    sw.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  });
+  sw.appendChild(b);
+});
+
+/* Input */
+const mouse = {x:0,y:0,tx:0,ty:0};
+addEventListener('pointermove', e=>{ mouse.tx=(e.clientX/innerWidth)*2-1; mouse.ty=(e.clientY/innerHeight)*2-1; hideHint(); });
+addEventListener('pointerleave', ()=>{mouse.tx=0;mouse.ty=0;});
+let gone=false; function hideHint(){ if(gone) return; gone=true; document.getElementById('hint').style.opacity=0; }
+addEventListener('scroll', ()=>{ if(scrollY>40) hideHint(); },{passive:true});
+
+const sections = [...document.querySelectorAll('main section')];
+let wide = true;
+function resize(){
+  const w=innerWidth,h=innerHeight;
+  renderer.setSize(w,h,false);
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  wide = w/h > 1.1;
+}
+addEventListener('resize', resize); resize();
+
+let sideX=0, yaw=0.5, tilt=0, camZ=10, last=performance.now();
+const clock = new THREE.Clock();
+function tick(){
+  const t = clock.getElapsedTime();
+  const now = performance.now(); const dt = Math.min((now-last)/1000, 0.1); last = now;
+  const k = r => 1-Math.exp(-dt*r);
+  mouse.x += (mouse.tx-mouse.x)*k(4.2);
+  mouse.y += (mouse.ty-mouse.y)*k(4.2);
+
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = max>0 ? Math.min(Math.max(scrollY/max,0),1) : 0;
+
+  let best=sections[0], bd=1e9;
+  for (const s of sections){ const r=s.getBoundingClientRect(); const d=Math.abs((r.top+r.bottom)/2-innerHeight/2); if(d<bd){bd=d;best=s;} }
+  const sd = best.dataset.side;
+  const target = wide ? (sd==='left'?2.2: sd==='right'?-2.2:0) : 0;
+  sideX += (target-sideX)*k(3);
+
+  const yawT = 0.5 + p*Math.PI*2*1.1 + mouse.x*0.8;
+  yaw += (yawT-yaw)*k(4.2);
+  drink.rotation.y = yaw;
+
+  const tiltT = mouse.y*0.12;
+  tilt += (tiltT-tilt)*k(4.2);
+  rig.rotation.x = tilt;
+  rig.position.x = sideX;
+  rig.position.y = -0.4;
+
+  const zT = (wide?10.4:13) - Math.sin(p*Math.PI)*1.4;
+  camZ += (zT-camZ)*k(3);
+  camera.position.set(mouse.x*0.35, (wide?2.6:3.2) - mouse.y*0.3, camZ);
+  camera.lookAt(sideX*0.3, wide?1.75:1.1, 0);
+
+  for (const m of ice){ const d = m.userData; m.position.y = d.base + Math.sin(t*0.9+d.ph)*0.03; m.rotation.y += d.sx*0.004; }
+  strawMesh.parent.rotation.z = -0.12 + Math.sin(t*0.6)*0.004;
+
+  for (const b of leaves){
+    const d=b.userData; d.a += d.sp*0.004;
+    b.position.set(Math.cos(d.a)*d.r + sideX*0.4, d.y + Math.sin(t*0.7+d.a*3)*0.12, Math.sin(d.a)*d.r*0.6 - 1.2);
+    b.rotation.x += d.spin.x*0.01; b.rotation.y += d.spin.y*0.01; b.rotation.z += d.spin.z*0.01;
+  }
+  renderer.render(scene,camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
