@@ -316,6 +316,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 .modal ul{list-style:none;text-align:left;border-top:2px solid var(--forest);border-bottom:2px solid var(--forest);padding:.8rem 0;margin:1rem 0;display:grid;gap:.3rem}
 .modal li{display:flex;justify-content:space-between;gap:1rem}
 .modal .go{font-size:.95rem;margin-bottom:1.2rem}
+.mbtns{display:grid;gap:.7rem}
 
 @media(max-width:1100px){.links{gap:1rem}.links a{font-size:.7rem}}
 @media(max-width:900px){
@@ -617,18 +618,26 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
   <div class="m">
     <svg viewBox="0 0 60 60" width="64" height="64" style="margin:0 auto" aria-hidden="true"><circle cx="30" cy="30" r="27" fill="#35c94b" stroke="#0f2a12" stroke-width="3"/><path d="M17 31l9 9 17-19" fill="none" stroke="#0f2a12" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <h3 id="mTitle">Order placed!</h3>
+    <h3 id="mTitle">Last step!</h3>
     <div class="num" id="mNum"></div>
     <p class="go" id="mMsg"></p>
     <ul id="mList"></ul>
-    <button class="btn pink block" id="mClose" type="button">Back to the menu</button>
+    <div class="mbtns">
+      <a class="btn dark block" id="mFb" href="#" target="_blank" rel="noopener">Send order on Messenger</a>
+      <button class="btn block" id="mCopy" type="button">Copy order text</button>
+      <button class="btn pink block" id="mClose" type="button">Back to the menu</button>
+    </div>
   </div>
 </div>
 
 <script>
 /* ---------- settings ---------- */
-// To receive real orders, paste a webhook address here (Make, Zapier, a Google Sheet script, or the shop's own system).
-const ORDER_ENDPOINT = '';
+// Orders are saved to a Google Sheet. Paste the web app address from the Apps Script here.
+const ORDER_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxju-tJ_8U5W1UZdRPROCxhSaBbFp3XDLj-CAZATei3p9m4-7h1NvJVHai8KyoebeuS/exec';
+// Orders go to a Google Sheet through the web app address above. Set this to false to skip the Messenger step.
+const USE_MESSENGER = true;
+// The Facebook page that receives orders in Messenger. This is the part after m.me/ in the page's Messenger link.
+const FB_PAGE = 'ourmatchaclub';
 // To show the live Instagram feed, create a free feed at behold.so and paste its feed ID here.
 const BEHOLD_FEED_ID = '';
 const IG_URL = 'https://www.instagram.com/ourmatchaclub/';
@@ -817,6 +826,26 @@ document.querySelectorAll('input[name=type],input[name=pay]').forEach(r=>r.addEv
 function cleanPhone(v){ return v.replace(/[\s\-().]/g,''); }
 function validPhone(v){ return /^(\+?63|0)9\d{9}$/.test(cleanPhone(v)); }
 
+function orderText(o){
+  const L = [];
+  L.push('New order from the website');
+  L.push('Order number: ' + o.number);
+  L.push('');
+  L.push('Name: ' + o.name);
+  L.push('Phone: ' + o.phone);
+  L.push(o.type==='delivery' ? 'Delivery to: ' + o.address : 'Pickup');
+  L.push('');
+  L.push('Items:');
+  o.items.forEach(i=>L.push(i.qty + ' x ' + i.name + ' - ' + peso(i.qty*i.price)));
+  L.push('');
+  L.push('Subtotal: ' + peso(o.subtotal));
+  if(o.type==='delivery') L.push('Delivery fee: ' + (o.fee ? peso(o.fee) : 'Free'));
+  L.push('Total: ' + peso(o.total));
+  L.push('Payment: ' + (o.payment==='Cash' ? (o.type==='delivery' ? 'Cash on delivery' : 'Cash on pickup') : o.payment));
+  if(o.notes) L.push('Notes: ' + o.notes);
+  return L.join('\n');
+}
+
 $('orderForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const err = $('err'); err.textContent = '';
@@ -837,10 +866,17 @@ $('orderForm').addEventListener('submit', async e=>{
     items:Object.entries(cart).map(([id,q])=>({id,name:byId[id].name,qty:q,price:byId[id].price})),
     subtotal:t.sub, fee:t.fee, total:t.total, placedAt:new Date().toISOString()
   };
+  order.text = orderText(order);
+  order.url = 'https://m.me/' + FB_PAGE + '?text=' + encodeURIComponent(order.text);
+  if(USE_MESSENGER){
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(order.text).catch(()=>{}); }catch(_){}
+    try{ window.open(order.url, '_blank'); }catch(_){}
+  }
   const btn = $('placeBtn'); btn.disabled = true; btn.textContent = 'Sending...';
   let ok = true;
   if(ORDER_ENDPOINT){
-    try{ const r = await fetch(ORDER_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)}); ok = r.ok; }
+    const payload = Object.assign({}, order); delete payload.url; delete payload.text;
+    try{ await fetch(ORDER_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}); }
     catch(_){ ok = false; }
   }
   btn.disabled = false; btn.textContent = 'Place Order';
@@ -853,8 +889,21 @@ function showModal(o){
   const first = o.name.split(' ')[0];
   const payMsg = o.payment==='Cash'
     ? 'You will pay in cash ' + (o.type==='delivery'?'when it arrives.':'when you pick it up.')
-    : 'We will send your ' + o.payment + ' payment link there too.';
-  $('mMsg').textContent = 'Thank you, ' + first + '. We will message you on ' + o.phone + ' to confirm your order. ' + payMsg;
+    : 'We will send your ' + o.payment + ' payment link in the chat.';
+  $('mFb').hidden = !USE_MESSENGER; $('mCopy').hidden = !USE_MESSENGER;
+  if(USE_MESSENGER){
+    $('mTitle').textContent = 'Last step, ' + first + '!';
+    $('mMsg').textContent = 'Your order is ready. Messenger should open with your order in it. Tap Send so we get it. ' + payMsg;
+  } else {
+    $('mTitle').textContent = 'Order placed!';
+    $('mMsg').textContent = 'Thank you, ' + first + '. We will message you on ' + o.phone + ' to confirm your order. ' + payMsg;
+  }
+  $('mFb').href = o.url;
+  $('mCopy').textContent = 'Copy order text';
+  $('mCopy').onclick = ()=>{
+    const done = ()=>{ $('mCopy').textContent = 'Copied'; };
+    try{ navigator.clipboard.writeText(o.text).then(done, ()=>{}); }catch(_){}
+  };
   const ul = $('mList'); ul.innerHTML = '';
   o.items.forEach(i=>{ const li = document.createElement('li'); li.innerHTML = `<span>${i.qty} x ${i.name}</span><span>${peso(i.qty*i.price)}</span>`; ul.appendChild(li); });
   const fee = document.createElement('li'); fee.innerHTML = `<span>${o.type==='delivery'?'Delivery':'Pickup'}</span><span>${o.fee?peso(o.fee):'Free'}</span>`; ul.appendChild(fee);
