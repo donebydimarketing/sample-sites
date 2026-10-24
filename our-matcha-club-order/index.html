@@ -637,7 +637,7 @@ const ORDER_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxju-tJ_8U5W1UZd
 // Orders go to a Google Sheet through the web app address above. Set this to false to skip the Messenger step.
 const USE_MESSENGER = true;
 // The Facebook page that receives orders in Messenger. This is the part after m.me/ in the page's Messenger link.
-const FB_PAGE = 'ourmatchaclub';
+const FB_PAGE = '61579426652445';
 // To show the live Instagram feed, create a free feed at behold.so and paste its feed ID here.
 const BEHOLD_FEED_ID = '';
 const IG_URL = 'https://www.instagram.com/ourmatchaclub/';
@@ -648,6 +648,8 @@ const FREE_DELIVERY_OVER = 600, DELIVERY_FEE = 49;
 
 /* ---------- drink art ---------- */
 let uid = 0;
+const SNACK_ICON = {sando:'🥪',cookies:'🍪',pastry:'🥐',cinroll:'🥮'};
+function itemArt(i,o){ return i.cat==='snacks' ? `<span style="font-size:5rem;line-height:1;display:block;text-align:center;padding:2.2rem 0" aria-hidden="true">${SNACK_ICON[i.id]||'🍪'}</span>` : cupSVG(o||i.cup); }
 function cupSVG(o){
   const id = 'q'+(uid++);
   const straw = o.noStraw ? '' : `<g><line x1="74" y1="6" x2="66" y2="140" stroke="#ff3d8b" stroke-width="7" stroke-linecap="round"/><line x1="74" y1="6" x2="66" y2="140" stroke="#fff" stroke-width="7" stroke-dasharray="5 7" stroke-linecap="butt" opacity=".75"/></g>`;
@@ -684,12 +686,12 @@ const GREEN = '#5c8d1c';
 const ITEMS = [
   {id:'ube',cat:'weekend',name:'Ube My Love',desc:'Our weekend drop. Purple ube cream over green matcha. Saturday and Sunday only.',price:240,bg:'#dcd0ff',cup:{bottom:'#d8c2f0',mid:'#6f9a27',top:'#c9a8ea'}},
 
-  {id:'classic',cat:'whims',name:'The Classic Club',desc:'Our signature. Smooth, premium ceremonial matcha whisked over oat milk and our signature sweetener.',price:225,bg:'#c9f0b4',cup:{bottom:'#f1ead2',mid:'#b4cf6a',top:GREEN}},
-  {id:'berry',cat:'whims',name:'Berry First Matcha',desc:'Bold ceremonial matcha over oat milk and strawberry puree. New to matcha? Try this.',price:235,bg:'#ffd0e2',cup:{bottom:'#d8467a',mid:'#c4cf7e',top:GREEN}},
-  {id:'mango',cat:'whims',name:'Sunny Mango Matcha',desc:'Tropical, bright mango puree topped with smooth whisked matcha and oat milk.',price:235,bg:'#ffe9a8',cup:{bottom:'#ffb627',mid:'#c9d35a',top:GREEN}},
+  {id:'classic',cat:'whims',name:'The Classic Club',desc:'Our signature. Smooth, premium ceremonial matcha whisked over oat milk and our signature sweetener.',price:230,bg:'#c9f0b4',cup:{bottom:'#f1ead2',mid:'#b4cf6a',top:GREEN}},
+  {id:'berry',cat:'whims',name:'Berry First Matcha',desc:'Bold ceremonial matcha over oat milk and strawberry puree. New to matcha? Try this.',price:240,bg:'#ffd0e2',cup:{bottom:'#d8467a',mid:'#c4cf7e',top:GREEN}},
+  {id:'mango',cat:'whims',name:'Sunny Mango Matcha',desc:'Tropical, bright mango puree topped with smooth whisked matcha and oat milk.',price:240,bg:'#ffe9a8',cup:{bottom:'#ffb627',mid:'#c9d35a',top:GREEN}},
   {id:'hoji',cat:'whims',name:'Velvet Hoji',desc:'Deep, roasted and earthy hojicha over oat milk. Naturally lower in caffeine for a cozy, grounded vibe.',price:220,bg:'#e8c9a8',cup:{bottom:'#f1e4d0',mid:'#b98657',top:'#7a4a2b'}},
-  {id:'stargirl',cat:'whims',name:'Star Girl Matcha',desc:'Honey Star cereal milk layered under a rich ceremonial matcha.',price:240,bg:'#fff2cf',cup:{bottom:'#ffe08a',mid:'#c9d35a',top:GREEN}},
-  {id:'vibes',cat:'whims',name:'Good Vibes Matcha',desc:'Trix cereal milk paired with a smooth, perfectly whisked shot of ceremonial grade matcha.',price:240,bg:'#d6ecff',cup:{bottom:'#f7a8c8',mid:'#c4cf7e',top:GREEN}},
+  {id:'stargirl',cat:'whims',name:'Star Girl Matcha',desc:'Honey Star cereal milk layered under a rich ceremonial matcha.',price:250,bg:'#fff2cf',cup:{bottom:'#ffe08a',mid:'#c9d35a',top:GREEN}},
+  {id:'vibes',cat:'whims',name:'Good Vibes Matcha',desc:'Trix cereal milk paired with a smooth, perfectly whisked shot of ceremonial grade matcha.',price:250,bg:'#d6ecff',cup:{bottom:'#f7a8c8',mid:'#c4cf7e',top:GREEN}},
 
   {id:'latte',cat:'coffee',name:'Cafe Latte',desc:'Rich espresso and smooth creamy milk. Syrups: vanilla or roasted hazelnut. Hot or iced.',price:130,bg:'#e8c9a8',cup:{bottom:'#f2e4cf',mid:'#b9895d',top:'#6b4528'}},
   {id:'mocha',cat:'coffee',name:'Mocha Loka',desc:'Deep espresso and rich house made chocolate. Hot or iced.',price:150,bg:'#ead3bd',cup:{bottom:'#8a5a3a',mid:'#6b4528',top:'#3e2412'}},
@@ -699,17 +701,21 @@ const ITEMS = [
   {id:'jasmine',cat:'other',name:'Jasmine Green Tea',desc:'Light, aromatic and beautifully floral.',price:99,bg:'#f4f6c8',cup:{bottom:'#fff2b0',mid:'#f6eaa0',top:'#e9dc8a'}},
   {id:'genmai',cat:'other',name:'Genmaicha',desc:'Japanese green tea blended with roasted popped brown rice. Deep and complex.',price:99,bg:'#fbe6b4',cup:{bottom:'#e9c46a',mid:'#e0b85a',top:'#c99a3c'}},
   {id:'hibiscus',cat:'other',name:'Hibiscus Tea',desc:'Naturally caffeine free. Calming herbal floral notes for a relaxed mind.',price:99,bg:'#ffd0e2',cup:{bottom:'#e63b6f',mid:'#c42a5c',top:'#9d1f4a'}},
-  {id:'choco',cat:'other',name:'Choco Loko',desc:'A decadent premium chocolate blend with creamy milk. Hot or iced.',price:120,bg:'#ead3bd',cup:{bottom:'#6b4528',mid:'#a87445',top:'#f2e4cf'}},
-  {id:'ichigo',cat:'other',name:'Ichigo Mylk',desc:'Creamy milk swirled with our signature sweet strawberry puree. No caffeine, just pure pink vibes.',price:120,bg:'#ffd0e2',cup:{bottom:'#ff9fc0',mid:'#ffc1d6',top:'#ffd9e6'}},
+  {id:'choco',cat:'other',name:'Choco Loko',desc:'A decadent premium chocolate blend with creamy milk. Hot or iced.',price:130,bg:'#ead3bd',cup:{bottom:'#6b4528',mid:'#a87445',top:'#f2e4cf'}},
+  {id:'ichigo',cat:'other',name:'Ichigo Mylk',desc:'Creamy milk swirled with our signature sweet strawberry puree. No caffeine, just pure pink vibes.',price:130,bg:'#ffd0e2',cup:{bottom:'#ff9fc0',mid:'#ffc1d6',top:'#ffd9e6'}},
   {id:'peach',cat:'other',name:'Peach Oolong Iced Tea',desc:'Crisp, floral oolong tea with a sweet punch of peach and creamy salted foam on top.',price:130,bg:'#ffe0c8',cup:{bottom:'#ffb07a',mid:'#ffc89a',top:'#fff0d8',foam:true}},
 
+  {id:'sando',cat:'snacks',name:'Tamago Sando',desc:'Soft, fluffy Japanese egg sandwich.',price:89,bg:'#fff2cf',cup:{bottom:'#f7ecd2',mid:'#f4d27a',top:'#efe1bd',noStraw:true}},
+  {id:'cookies',cat:'snacks',name:'Homebaked Cookies',desc:'Baked in house, soft in the middle.',price:85,bg:'#ead3bd',cup:{bottom:'#c99a6a',mid:'#a87445',top:'#6b4528',noStraw:true}},
+  {id:'pastry',cat:'snacks',name:'Pastry of the Day',desc:'Ask us what came out of the oven today.',price:65,bg:'#ffe9a8',cup:{bottom:'#f1d28a',mid:'#e0b85a',top:'#c99a3c',noStraw:true}},
+  {id:'cinroll',cat:'snacks',name:'Special Cinnamon Rolls',desc:'Warm, gooey and glazed.',price:110,bg:'#ffd0e2',cup:{bottom:'#e8c9a8',mid:'#c99a6a',top:'#fff0d8',noStraw:true}},
   {id:'foam',cat:'addon',name:'Sea Salt Cream Cold Foam',desc:'A velvety, savory sweet cream cloud on top.',price:30,bg:'#ffd0e2',cup:{bottom:'#b4cf6a',mid:'#8fb83e',top:GREEN,foam:true,noStraw:true}},
   {id:'oat',cat:'addon',name:'Oat Milk Upgrade',desc:'Barista grade oat milk.',price:35,bg:'#fff2cf',cup:{bottom:'#f7ecd2',mid:'#efe1bd',top:'#e6d4a6',noStraw:true}},
   {id:'shot',cat:'addon',name:'Extra Espresso Shot',desc:'Add a rich espresso shot.',price:30,bg:'#e8c9a8',cup:{bottom:'#8a5a3a',mid:'#6b4528',top:'#3e2412',noStraw:true}}
 ];
-const CATS = [['all','All'],['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha'],['addon','Add-ons']];
-const GROUPS = [['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha or Coffee'],['addon','Premium Customizations']];
-const CAT_LABEL = {weekend:'Weekend',whims:'Matcha',coffee:'Coffee',other:'Non-matcha',addon:'Add-on'};
+const CATS = [['all','All'],['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha'],['snacks','Snacks'],['addon','Add-ons']];
+const GROUPS = [['weekend','Weekend Drop'],['whims','Curated Whims'],['coffee','Zero Fuss Coffee'],['other','Non-Matcha or Coffee'],['snacks','Snacks'],['addon','Premium Customizations']];
+const CAT_LABEL = {weekend:'Weekend',whims:'Matcha',coffee:'Coffee',other:'Non-matcha',snacks:'Snack',addon:'Add-on'};
 const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 const peso = n => '₱' + n.toLocaleString('en-PH');
 
@@ -737,7 +743,7 @@ function renderMenu(){
     items.forEach(i=>{
       const el = document.createElement('article');
       el.className = 'card';
-      el.innerHTML = `<div class="art" style="background:${i.bg}"><span class="tagp">${CAT_LABEL[i.cat]}</span>${cupSVG(i.cup)}</div>
+      el.innerHTML = `<div class="art" style="background:${i.bg}"><span class="tagp">${CAT_LABEL[i.cat]}</span>${itemArt(i)}</div>
         <div class="body"><h3>${i.name}</h3><p>${i.desc}</p>
         <div class="foot"><span class="price">${peso(i.price)}</span><button class="add" type="button" data-id="${i.id}" aria-label="Add ${i.name} to your order">Add +</button></div></div>`;
       g.appendChild(el);
@@ -772,7 +778,7 @@ function renderCart(bump){
     const i = byId[id];
     const li = document.createElement('li');
     li.className = 'line';
-    li.innerHTML = `<div class="th" style="background:${i.bg}">${cupSVG(Object.assign({},i.cup,{noStraw:true}))}</div>
+    li.innerHTML = `<div class="th" style="background:${i.bg}">${itemArt(i,Object.assign({},i.cup,{noStraw:true}))}</div>
       <div><div class="nm">${i.name}</div><div class="pp">${peso(i.price)} each</div>
         <div class="qty"><button type="button" data-a="dec" data-id="${id}" aria-label="One less ${i.name}">&minus;</button><span aria-live="polite">${q}</span><button type="button" data-a="inc" data-id="${id}" aria-label="One more ${i.name}">+</button></div></div>
       <div class="r"><div class="tot">${peso(i.price*q)}</div><button class="rm" type="button" data-a="rm" data-id="${id}">Remove</button></div>`;
@@ -990,19 +996,22 @@ if(BEHOLD_FEED_ID){
 // Put the photos in a folder named "photos" next to this file. Use these file names, or change the names here.
 // Any photo that is missing shows a colored tile instead, so the section always looks finished.
 const PLACE_PHOTOS = [
-  ['photos/place-1.jpg','The wooden bar'],
-  ['photos/place-2.jpg','Warm lights'],
-  ['photos/place-3.jpg','Cozy seats'],
-  ['photos/place-4.jpg','The green corner'],
-  ['photos/place-5.jpg','Fresh pours'],
-  ['photos/place-6.jpg','Matcha with friends']
+  ['photos/place-1.jpg','The bar and stools'],
+  ['photos/place-2.jpg','Pull up a stool'],
+  ['photos/place-3.jpg','The menu wall'],
+  ['photos/place-4.jpg','Cozy corners'],
+  ['photos/place-5.jpg','Our favorite shelf'],
+  ['photos/place-6.jpg','Fresh pours'],
+  ['photos/place-7.jpg','Made for sharing'],
+  ['photos/place-8.jpg','Whisked to order'],
+  ['photos/place-9.jpg','Premium matcha']
 ];
 const loaded = [];
 const gal = $('gallery');
 PLACE_PHOTOS.forEach(([src,label])=>{
   const f = document.createElement('figure'); f.className = 'shot';
   f.innerHTML = `<div class="ph">${label}</div><figcaption>${label}</figcaption>`;
-  const im = new Image(); im.alt = label + ' at Our Matcha Club'; im.loading = 'lazy'; im.decoding = 'async';
+  const im = new Image(); im.alt = label + ' at Our Matcha Club'; im.decoding = 'async';
   im.addEventListener('load', ()=>{ f.classList.add('has'); f.insertBefore(im, f.firstChild); loaded.push({im,label}); im.addEventListener('click', ()=>openLB(im)); });
   im.src = src;
   gal.appendChild(f);
