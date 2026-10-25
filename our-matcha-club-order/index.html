@@ -120,11 +120,41 @@ section.pad{padding:5rem 0}
 .tabs{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
 .tab{font-family:var(--mono);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;background:var(--cream);border:2px solid var(--forest);border-radius:99px;padding:.55rem 1.1rem}
 .tab[aria-selected="true"]{background:var(--forest);color:var(--cream)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.4rem}
+.grid{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .5rem 1.6rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;perspective:900px}
+.grid::-webkit-scrollbar{display:none}
+.grid .card{flex:0 0 min(250px,72vw);scroll-snap-align:start}
+.grid.flat{flex-wrap:wrap;overflow:visible;scroll-snap-type:none}
+@media(max-width:700px){.grid.flat{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory}}
+.grphead{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2.4rem 0 .8rem}
+.grphead:first-child{margin-top:0}
+.grphead .grp{margin:0}
+.arrows{display:flex;gap:.5rem;align-items:center}
+.arrows .hint{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-right:.3rem}
+.arr{width:42px;height:42px;border-radius:50%;border:2px solid var(--forest);background:var(--cream);box-shadow:2px 2px 0 var(--forest);font-size:1.3rem;line-height:1;display:grid;place-items:center}
+.arr:active{transform:translate(2px,2px);box-shadow:none}
+.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:.2rem .2rem .5rem}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;white-space:nowrap}
+/* poster wall */
+.posters{background:var(--pink-l);border-top:2px solid var(--forest);border-bottom:2px solid var(--forest);overflow:hidden;position:relative}
+.posters .head{text-align:center;margin-inline:auto}
+.spark{position:absolute;font-size:2rem;color:var(--pink);animation:tw 3s ease-in-out infinite;pointer-events:none}
+@keyframes tw{50%{transform:scale(1.4) rotate(20deg);opacity:.6}}
+.cflow{perspective:1100px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab}
+.cflow::-webkit-scrollbar{display:none}
+.cflow.drag{cursor:grabbing;scroll-snap-type:none}
+.ctrack{display:flex;gap:1.1rem;width:max-content;padding:2.4rem calc(50vw - 130px) 3rem}
+.pcard{flex:none;width:260px;aspect-ratio:1414/2000;scroll-snap-align:center;border:3px solid var(--forest);border-radius:22px;box-shadow:8px 10px 0 var(--forest);overflow:hidden;background:var(--cream);transform-style:preserve-3d;will-change:transform;transition:box-shadow .2s}
+.pcard img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+.cap3d{text-align:center;font-family:var(--mono);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;min-height:1.4em}
+.cnav{display:flex;justify-content:center;gap:.8rem;margin-top:1rem}
+@media(prefers-reduced-motion:reduce){.spark{animation:none}}
+@media(max-width:700px){.grphead{gap:.5rem}.grphead .grp{font-size:1.45rem;min-width:0}.arrows .hint{display:none}.arr{width:38px;height:38px}}
+
 .grp{font-size:1.9rem;margin:2.4rem 0 1.1rem}
 .grp:first-child{margin-top:0}
 .card{background:#fff8e8;border:2px solid var(--forest);border-radius:22px;box-shadow:5px 5px 0 var(--forest);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
-.card:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--forest)}
+.card:hover{transform:translate(-2px,-4px) rotateX(3deg) rotateY(-4deg);box-shadow:8px 9px 0 var(--forest)}
 .card .art{height:190px;display:grid;place-items:center;border-bottom:2px solid var(--forest);position:relative}
 .card .art svg{height:160px;width:auto}
 .card .tagp{position:absolute;top:10px;left:10px;background:var(--cream);border:2px solid var(--forest);border-radius:99px;font-family:var(--mono);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:.15rem .6rem}
@@ -155,7 +185,7 @@ section.pad{padding:5rem 0}
 .ownergrid{display:grid;grid-template-columns:.8fr 1.2fr;gap:2.4rem;align-items:start}
 .ownercard{position:sticky;top:92px;background:var(--cream);border:2px solid var(--forest);border-radius:24px;box-shadow:6px 6px 0 var(--forest);padding:1.8rem;text-align:center}
 .stamp{width:150px;height:150px;margin:0 auto 1.2rem;border-radius:50%;background:var(--green);border:3px solid var(--forest);box-shadow:5px 5px 0 var(--pink);display:grid;place-items:center;overflow:hidden;font-family:var(--display);font-size:4rem;color:var(--pink);text-shadow:3px 3px 0 var(--forest)}
-.stamp img{width:100%;height:100%;object-fit:cover}
+.stamp img{width:100%;height:100%;object-fit:cover;object-position:52% 46%;transform:scale(2.2);transform-origin:50% 44%}
 .ownercard h3{font-size:2rem}
 .ownercard .role{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin:.3rem 0 .9rem}
 .chips{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.2rem}
@@ -319,6 +349,12 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
 .mbtns{display:grid;gap:.7rem}
 
 @media(max-width:1100px){.links{gap:1rem}.links a{font-size:.7rem}}
+@media(max-width:700px){
+  .gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:.9rem;padding:.3rem .3rem 1.2rem;scrollbar-width:none}
+  .gallery::-webkit-scrollbar{display:none}
+  .gallery .shot,.gallery .shot:nth-child(1){flex:0 0 76%;height:300px;grid-column:auto;grid-row:auto;scroll-snap-align:center}
+  .pcard{width:230px}.ctrack{padding-inline:calc(50vw - 115px)}
+}
 @media(max-width:900px){
   .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
   .shot:nth-child(1){grid-column:span 2;grid-row:span 2}
@@ -363,6 +399,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     <a class="logo" href="#top" aria-label="Our Matcha Club, home"><span class="mark" aria-hidden="true">omc!</span>Our Matcha Club</a>
     <ul class="links">
       <li><a href="#menu">Menu</a></li>
+      <li><a href="#posters">Posters</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#owner">The Owner</a></li>
       <li><a href="#visit">Visit</a></li>
@@ -432,6 +469,18 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     <div class="tabs" role="tablist" aria-label="Menu categories" id="tabs"></div>
     <div id="menuGrid"></div>
   </div>
+</section>
+
+<section class="pad posters" id="posters">
+  <span class="spark" style="left:8%;top:14%" aria-hidden="true">&#10022;</span><span class="spark" style="right:10%;top:22%;animation-delay:1s" aria-hidden="true">&#10022;</span><span class="spark" style="left:16%;bottom:18%;animation-delay:2s" aria-hidden="true">&#10022;</span>
+  <div class="wrap head">
+    <div class="eyebrow">The drink wall</div>
+    <h2>Swipe the <em class="s">posters.</em></h2>
+    <p>Every drink has its own little poster. Drag or swipe to flip through them.</p>
+  </div>
+  <div class="cflow" id="cflow" tabindex="0" aria-label="Drink posters. Swipe left or right."><div class="ctrack" id="ctrack"></div></div>
+  <div class="cap3d" id="cap3d" aria-live="polite"></div>
+  <div class="cnav"><button class="arr" id="pPrev" type="button" aria-label="Previous poster">&lsaquo;</button><button class="arr" id="pNext" type="button" aria-label="Next poster">&rsaquo;</button></div>
 </section>
 
 <section class="pad about" id="about">
@@ -642,13 +691,13 @@ const FB_PAGE = '61579426652445';
 const BEHOLD_FEED_ID = '';
 const IG_URL = 'https://www.instagram.com/ourmatchaclub/';
 // To show the owner's photo, put the image in this folder (for example christina.jpg) and type its file name here.
-const OWNER_PHOTO = '';
+const OWNER_PHOTO = 'christina.jpg';
 if(OWNER_PHOTO){ const s = document.getElementById('ownerPhoto'); s.innerHTML = ''; const im = document.createElement('img'); im.src = OWNER_PHOTO; im.alt = 'Christina, owner of Our Matcha Club'; s.appendChild(im); }
 const FREE_DELIVERY_OVER = 600, DELIVERY_FEE = 49;
 
 /* ---------- drink art ---------- */
 let uid = 0;
-const SNACK_ICON = {sando:'🥪',cookies:'🍪',pastry:'🥐',cinroll:'🥮'};
+const SNACK_ICON = {grilled:'🧀',sando:'🥪',cookies:'🍪',pastry:'🥐',cinroll:'🥮'};
 function itemArt(i,o){ return i.cat==='snacks' ? `<span style="font-size:5rem;line-height:1;display:block;text-align:center;padding:2.2rem 0" aria-hidden="true">${SNACK_ICON[i.id]||'🍪'}</span>` : cupSVG(o||i.cup); }
 function cupSVG(o){
   const id = 'q'+(uid++);
@@ -692,6 +741,8 @@ const ITEMS = [
   {id:'hoji',cat:'whims',name:'Velvet Hoji',desc:'Deep, roasted and earthy hojicha over oat milk. Naturally lower in caffeine for a cozy, grounded vibe.',price:220,bg:'#e8c9a8',cup:{bottom:'#f1e4d0',mid:'#b98657',top:'#7a4a2b'}},
   {id:'stargirl',cat:'whims',name:'Star Girl Matcha',desc:'Honey Star cereal milk layered under a rich ceremonial matcha.',price:250,bg:'#fff2cf',cup:{bottom:'#ffe08a',mid:'#c9d35a',top:GREEN}},
   {id:'vibes',cat:'whims',name:'Good Vibes Matcha',desc:'Trix cereal milk paired with a smooth, perfectly whisked shot of ceremonial grade matcha.',price:250,bg:'#d6ecff',cup:{bottom:'#f7a8c8',mid:'#c4cf7e',top:GREEN}},
+  {id:'storm',cat:'whims',name:'Midnight Storm',desc:'Layered ceremonial matcha over creamy milk and a bold, dark coffee base.',price:250,bg:'#d6ecff',cup:{bottom:'#3e2412',mid:'#f7ecd2',top:GREEN}},
+  {id:'whitemocha',cat:'whims',name:'White Mocha Einspanner',desc:'Our holiday special. Cool matcha and white mocha topped with a cloud of whipped cream.',price:240,bg:'#d6ecff',cup:{bottom:'#f1e4d0',mid:'#c9d35a',top:GREEN,foam:true}},
 
   {id:'latte',cat:'coffee',name:'Cafe Latte',desc:'Rich espresso and smooth creamy milk. Syrups: vanilla or roasted hazelnut. Hot or iced.',price:130,bg:'#e8c9a8',cup:{bottom:'#f2e4cf',mid:'#b9895d',top:'#6b4528'}},
   {id:'mocha',cat:'coffee',name:'Mocha Loka',desc:'Deep espresso and rich house made chocolate. Hot or iced.',price:150,bg:'#ead3bd',cup:{bottom:'#8a5a3a',mid:'#6b4528',top:'#3e2412'}},
@@ -706,6 +757,7 @@ const ITEMS = [
   {id:'peach',cat:'other',name:'Peach Oolong Iced Tea',desc:'Crisp, floral oolong tea with a sweet punch of peach and creamy salted foam on top.',price:130,bg:'#ffe0c8',cup:{bottom:'#ffb07a',mid:'#ffc89a',top:'#fff0d8',foam:true}},
 
   {id:'sando',cat:'snacks',name:'Tamago Sando',desc:'Soft, fluffy Japanese egg sandwich.',price:89,bg:'#fff2cf',cup:{bottom:'#f7ecd2',mid:'#f4d27a',top:'#efe1bd',noStraw:true}},
+  {id:'grilled',cat:'snacks',name:'Grilled Cheese Sandwich',desc:'Toasted golden, with melty, stretchy cheese.',price:120,bg:'#ffe9a8',cup:{bottom:'#f1d28a',mid:'#e0b85a',top:'#c99a3c',noStraw:true}},
   {id:'cookies',cat:'snacks',name:'Homebaked Cookies',desc:'Baked in house, soft in the middle.',price:85,bg:'#ead3bd',cup:{bottom:'#c99a6a',mid:'#a87445',top:'#6b4528',noStraw:true}},
   {id:'pastry',cat:'snacks',name:'Pastry of the Day',desc:'Ask us what came out of the oven today.',price:65,bg:'#ffe9a8',cup:{bottom:'#f1d28a',mid:'#e0b85a',top:'#c99a3c',noStraw:true}},
   {id:'cinroll',cat:'snacks',name:'Special Cinnamon Rolls',desc:'Warm, gooey and glazed.',price:110,bg:'#ffd0e2',cup:{bottom:'#e8c9a8',mid:'#c99a6a',top:'#fff0d8',noStraw:true}},
@@ -738,8 +790,19 @@ function renderMenu(){
   GROUPS.filter(([k])=>cat==='all'||cat===k).forEach(([k,label])=>{
     const items = ITEMS.filter(i=>i.cat===k);
     if(!items.length) return;
-    const h = document.createElement('h3'); h.className = 'grp'; h.textContent = label; grid.appendChild(h);
-    const g = document.createElement('div'); g.className = 'grid';
+    const hd = document.createElement('div'); hd.className = 'grphead';
+    const h = document.createElement('h3'); h.className = 'grp'; h.textContent = label; hd.appendChild(h);
+    const g = document.createElement('div'); g.className = 'grid' + (cat==='all' ? '' : ' flat');
+    if(items.length > 1){
+      const ar = document.createElement('div'); ar.className = 'arrows';
+      ar.innerHTML = '<span class="hint">Swipe</span><button class="arr" type="button" aria-label="Scroll ' + label + ' left">&lsaquo;</button><button class="arr" type="button" aria-label="Scroll ' + label + ' right">&rsaquo;</button>';
+      const [l,r] = ar.querySelectorAll('.arr');
+      const step = ()=> Math.max(240, g.clientWidth*0.8);
+      l.onclick = ()=> g.scrollBy({left:-step(),behavior:'smooth'});
+      r.onclick = ()=> g.scrollBy({left:step(),behavior:'smooth'});
+      hd.appendChild(ar);
+    }
+    grid.appendChild(hd);
     items.forEach(i=>{
       const el = document.createElement('article');
       el.className = 'card';
@@ -991,6 +1054,51 @@ if(BEHOLD_FEED_ID){
   const w = document.createElement('behold-widget'); w.setAttribute('feed-id', BEHOLD_FEED_ID);
   igGrid.replaceWith(w);
 }
+
+
+/* ---------- 3D poster wall ---------- */
+const POSTERS = [
+  ['our-matcha-club','Our Matcha Club'],['zero-drama','Zero drama'],['classic-club','The Classic Club'],['berry-first','Berry First Matcha'],['sunny-mango','Sunny Mango Matcha'],
+  ['star-girl','Star Girl Matcha'],['good-vibes','Good Vibes Matcha'],['velvet-hoji','Velvet Hoji'],['midnight-storm','Midnight Storm'],['white-mocha','White Mocha Einspanner'],['cafe-latte','Cafe Latte'],['mocha-loka','Mocha Loka'],
+  ['oat-white','Oat White'],['mango-espresso-tonic','Mango Espresso Tonic'],['choco-loko','Choco Loko'],['tamago-sando','Tamago Sando'],['grilled-cheese','Grilled Cheese Sandwich'],['cookies','Homebaked Cookies'],['pastry-of-the-day','Pastry of the Day']
+];
+(function(){
+  const fl = $('cflow'), tr = $('ctrack'), cap = $('cap3d');
+  POSTERS.forEach(([f,t])=>{
+    const c = document.createElement('div'); c.className = 'pcard';
+    const im = new Image(); im.src = 'posters/' + f + '.jpg'; im.alt = t + ' poster'; im.width = 540; im.height = 764; im.draggable = false;
+    c.appendChild(im); c.dataset.t = t; tr.appendChild(c);
+  });
+  const cards = [...tr.children];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let raf = 0, cur = -1;
+  function paint(){
+    raf = 0;
+    const mid = fl.scrollLeft + fl.clientWidth/2; let best = 0, bd = 1e9;
+    cards.forEach((c,i)=>{
+      const cx = c.offsetLeft + c.offsetWidth/2, o = (cx - mid) / c.offsetWidth, a = Math.min(Math.abs(o), 3);
+      const sgn = o < 0 ? -1 : 1;
+      c.style.transform = reduce ? 'none' : 'translateZ(' + (-a*110) + 'px) rotateY(' + (-sgn*Math.min(a,1.6)*34) + 'deg) scale(' + (1 - a*0.05) + ')';
+      c.style.opacity = String(Math.max(0.35, 1 - a*0.22));
+      if(Math.abs(o) < bd){ bd = Math.abs(o); best = i; }
+    });
+    if(best !== cur){ cur = best; cap.textContent = cards[best].dataset.t; }
+  }
+  const queue = ()=>{ if(!raf) raf = requestAnimationFrame(paint); };
+  fl.addEventListener('scroll', queue, {passive:true}); addEventListener('resize', queue);
+  const go = d => { const n = Math.max(0, Math.min(cards.length-1, cur + d)); goTo(n); };
+  function goTo(n){ const c = cards[n]; fl.scrollTo({left: c.offsetLeft + c.offsetWidth/2 - fl.clientWidth/2, behavior:'smooth'}); }
+  $('pPrev').onclick = ()=>go(-1); $('pNext').onclick = ()=>go(1);
+  cards.forEach((c,i)=> c.addEventListener('click', ()=>{ if(!moved) goTo(i); }));
+  fl.addEventListener('keydown', e=>{ if(e.key==='ArrowRight'){ e.preventDefault(); go(1); } if(e.key==='ArrowLeft'){ e.preventDefault(); go(-1); } });
+  // mouse drag, for desktop
+  let down = false, sx = 0, sl = 0, moved = false;
+  fl.addEventListener('pointerdown', e=>{ if(e.pointerType!=='mouse') return; down = true; moved = false; sx = e.clientX; sl = fl.scrollLeft; });
+  addEventListener('pointermove', e=>{ if(!down) return; const dx = e.clientX - sx; if(Math.abs(dx) > 4){ moved = true; fl.classList.add('drag'); } fl.scrollLeft = sl - dx; });
+  addEventListener('pointerup', ()=>{ if(!down) return; down = false; fl.classList.remove('drag'); setTimeout(()=>{ moved = false; }, 0); if(cur >= 0) goTo(cur); });
+  // start on the middle-ish poster
+  requestAnimationFrame(()=>{ const n = 2; const c = cards[n]; fl.scrollLeft = c.offsetLeft + c.offsetWidth/2 - fl.clientWidth/2; paint(); });
+})();
 
 /* ---------- photos of the place ---------- */
 // Put the photos in a folder named "photos" next to this file. Use these file names, or change the names here.
