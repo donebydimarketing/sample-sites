@@ -4,8 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Our Matcha Club | Order Online</title>
-<meta name="description" content="Our Matcha Club. No drama, just good good matcha. Pick your drinks, add them to your order and pay with GCash, Maya or cash.">
+<meta name="description" content="Our Matcha Club. No drama, just good good matcha. Pick your drinks, add them to your order and pay online with GCash or Maya.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2335c94b' stroke='%230f2a12' stroke-width='4'/%3E%3Ctext x='32' y='40' font-size='22' font-weight='bold' text-anchor='middle' fill='%23ff3d8b'%3Eomc!%3C/text%3E%3C/svg%3E">
+<script>
+// Always open at the very top, unless the link points to a section such as #menu.
+try{ history.scrollRestoration = 'manual'; }catch(e){}
+addEventListener('load', ()=>{ if(!location.hash) scrollTo(0,0); });
+addEventListener('pageshow', e=>{ if(e.persisted && !location.hash) scrollTo(0,0); });
+</script>
 <style>
 @font-face{font-family:'Bagel Fat One';src:url(fonts/bagel-fat-one-latin-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
 @font-face{font-family:'Space Mono';src:url(fonts/space-mono-latin-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
@@ -424,7 +430,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
     <div>
       <div class="badge"><span aria-hidden="true">&#9733;</span> Whisking for you</div>
       <h1>No drama. Just good <em class="s">good</em> matcha.</h1>
-      <p class="lead">Fresh whisked iced matcha, poured over clear ice. Pick your drinks, add them to your order and pay with GCash, Maya or cash.</p>
+      <p class="lead">Fresh whisked iced matcha, poured over clear ice. Pick your drinks, add them to your order and pay online with GCash or Maya.</p>
       <div class="row">
         <a class="btn pink" href="#menu">Order now</a>
         <a class="btn" href="#instagram">See our feed</a>
@@ -492,7 +498,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
       <ul>
         <li>Every cup is whisked fresh</li>
         <li>Curated whims, fresh fruity flavors, just for you</li>
-        <li>Pickup or delivery, pay with GCash, Maya or cash</li>
+        <li>Pickup only, pay online with GCash or Maya</li>
         <li>Book us for your next event</li>
       </ul>
       <a class="btn pink" href="#contact">Book an event</a>
@@ -590,7 +596,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
           <div><span id="sFeeLabel">Pickup</span><span id="sFee">Free</span></div>
           <div class="grand"><span>Total</span><span id="sTot">&#8369;0</span></div>
         </div>
-        <p class="note">Delivery is free over &#8369;600.</p>
+        <p class="note"><b>All orders are for pickup.</b> Pick up your order yourself, or send any same-day courier (Grab, Lalamove, etc.). Pickup: 2 Quartz St., Meralco Village, Lias, Marilao, Bulacan.</p>
       </div>
 
       <div class="panel">
@@ -599,19 +605,11 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
         <form id="orderForm" novalidate>
           <div class="f"><label class="l" for="fName">Full name <i>*</i></label><input type="text" id="fName" name="name" autocomplete="name" placeholder="Juan Dela Cruz"></div>
           <div class="f"><label class="l" for="fPhone">Phone number <i>*</i></label><input type="tel" id="fPhone" name="phone" autocomplete="tel" inputmode="tel" placeholder="0917 123 4567"></div>
-          <fieldset class="f"><legend>Pickup or delivery <i>*</i></legend>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="type" value="pickup" checked><span>Pickup</span></label>
-              <label class="opt"><input type="radio" name="type" value="delivery"><span>Delivery</span></label>
-            </div>
-          </fieldset>
-          <div class="f" id="addrWrap" hidden><label class="l" for="fAddr">Delivery address <i>*</i></label><textarea id="fAddr" name="address" autocomplete="street-address" placeholder="House number, street, barangay, city"></textarea></div>
           <div class="f"><label class="l" for="fNote">Order notes (optional)</label><textarea id="fNote" name="notes" placeholder="Less sweet, extra ice, hot or iced and so on"></textarea></div>
           <fieldset class="f"><legend>Payment method <i>*</i></legend>
             <div class="opts">
               <label class="opt"><input type="radio" name="pay" value="GCash" checked><span>GCash</span></label>
               <label class="opt"><input type="radio" name="pay" value="Maya"><span>Maya</span></label>
-              <label class="opt"><input type="radio" name="pay" value="Cash"><span id="cashLbl">Cash on pickup</span></label>
             </div>
             <div class="hint" id="payHint">After we confirm your order, we message you a GCash payment link.</div>
           </fieldset>
@@ -824,15 +822,13 @@ grid.addEventListener('click', e=>{
 /* ---------- cart ---------- */
 const cart = {};
 const $ = id => document.getElementById(id);
-const orderType = () => document.querySelector('input[name=type]:checked').value;
+const orderType = () => 'pickup';
 function addItem(id){ cart[id] = (cart[id]||0)+1; renderCart(true); }
 function setQty(id,q){ if(q<=0) delete cart[id]; else cart[id] = q; renderCart(); }
 function totals(){
   const sub = Object.entries(cart).reduce((s,[id,q])=>s+byId[id].price*q,0);
   const n = Object.values(cart).reduce((s,q)=>s+q,0);
-  const delivery = orderType()==='delivery';
-  const fee = delivery && sub>0 && sub<FREE_DELIVERY_OVER ? DELIVERY_FEE : 0;
-  return {sub,n,delivery,fee,total:sub+fee};
+  return {sub,n,delivery:false,fee:0,total:sub};
 }
 function renderCart(bump){
   const t = totals();
@@ -878,19 +874,15 @@ new IntersectionObserver(es=>{ orderVisible = es[0].isIntersecting; updateBar();
 /* ---------- form ---------- */
 const hints = {
   GCash:'After we confirm your order, we message you a GCash payment link.',
-  Maya:'After we confirm your order, we message you a Maya payment link.',
-  Cash:'Pay in cash when you pick up your order or when it arrives.'
+  Maya:'After we confirm your order, we message you a Maya payment link.'
 };
 function syncForm(){
-  const delivery = orderType()==='delivery';
-  $('addrWrap').hidden = !delivery;
-  $('cashLbl').textContent = delivery ? 'Cash on delivery' : 'Cash on pickup';
   const pay = document.querySelector('input[name=pay]:checked').value;
   $('payHint').textContent = hints[pay];
   renderCart();
 }
 document.querySelectorAll('input[name=type],input[name=pay]').forEach(r=>r.addEventListener('change', syncForm));
-['fName','fPhone','fAddr'].forEach(id=>$(id).addEventListener('input', e=>e.target.classList.remove('bad')));
+['fName','fPhone'].forEach(id=>$(id).addEventListener('input', e=>e.target.classList.remove('bad')));
 
 function cleanPhone(v){ return v.replace(/[\s\-().]/g,''); }
 function validPhone(v){ return /^(\+?63|0)9\d{9}$/.test(cleanPhone(v)); }
@@ -902,15 +894,14 @@ function orderText(o){
   L.push('');
   L.push('Name: ' + o.name);
   L.push('Phone: ' + o.phone);
-  L.push(o.type==='delivery' ? 'Delivery to: ' + o.address : 'Pickup');
+  L.push('Pickup (Meralco Village, Lias, Marilao)');
   L.push('');
   L.push('Items:');
   o.items.forEach(i=>L.push(i.qty + ' x ' + i.name + ' - ' + peso(i.qty*i.price)));
   L.push('');
   L.push('Subtotal: ' + peso(o.subtotal));
-  if(o.type==='delivery') L.push('Delivery fee: ' + (o.fee ? peso(o.fee) : 'Free'));
   L.push('Total: ' + peso(o.total));
-  L.push('Payment: ' + (o.payment==='Cash' ? (o.type==='delivery' ? 'Cash on delivery' : 'Cash on pickup') : o.payment));
+  L.push('Payment: ' + o.payment + ' (pay now)');
   if(o.notes) L.push('Notes: ' + o.notes);
   return L.join('\n');
 }
@@ -918,19 +909,18 @@ function orderText(o){
 $('orderForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const err = $('err'); err.textContent = '';
-  ['fName','fPhone','fAddr'].forEach(id=>$(id).classList.remove('bad'));
+  ['fName','fPhone'].forEach(id=>$(id).classList.remove('bad'));
   const t = totals();
   if(t.n===0){ err.textContent = 'Your cart is empty. Pick a drink first.'; document.getElementById('menu').scrollIntoView(); return; }
-  const name = $('fName').value.trim(), phone = $('fPhone').value.trim(), addr = $('fAddr').value.trim();
+  const name = $('fName').value.trim(), phone = $('fPhone').value.trim();
   const msgs = [];
   if(!name){ $('fName').classList.add('bad'); msgs.push('Add your name.'); }
   if(!validPhone(phone)){ $('fPhone').classList.add('bad'); msgs.push('Add a mobile number like 0917 123 4567.'); }
-  if(t.delivery && !addr){ $('fAddr').classList.add('bad'); msgs.push('Add your delivery address.'); }
   if(msgs.length){ err.textContent = msgs.join(' '); const first = document.querySelector('.bad'); if(first) first.focus(); return; }
 
   const num = 'OMC-' + String(Math.floor(1000 + Math.random()*9000));
   const order = {
-    number:num, name, phone:cleanPhone(phone), type:orderType(), address:t.delivery?addr:'',
+    number:num, name, phone:cleanPhone(phone), type:orderType(), address:'',
     notes:$('fNote').value.trim(), payment:document.querySelector('input[name=pay]:checked').value,
     items:Object.entries(cart).map(([id,q])=>({id,name:byId[id].name,qty:q,price:byId[id].price})),
     subtotal:t.sub, fee:t.fee, total:t.total, placedAt:new Date().toISOString()
@@ -956,9 +946,7 @@ $('orderForm').addEventListener('submit', async e=>{
 function showModal(o){
   $('mNum').textContent = 'Order ' + o.number;
   const first = o.name.split(' ')[0];
-  const payMsg = o.payment==='Cash'
-    ? 'You will pay in cash ' + (o.type==='delivery'?'when it arrives.':'when you pick it up.')
-    : 'We will send your ' + o.payment + ' payment link in the chat.';
+  const payMsg = 'We will send your ' + o.payment + ' payment link in the chat.';
   $('mFb').hidden = !USE_MESSENGER; $('mCopy').hidden = !USE_MESSENGER;
   if(USE_MESSENGER){
     $('mTitle').textContent = 'Last step, ' + first + '!';
@@ -975,7 +963,7 @@ function showModal(o){
   };
   const ul = $('mList'); ul.innerHTML = '';
   o.items.forEach(i=>{ const li = document.createElement('li'); li.innerHTML = `<span>${i.qty} x ${i.name}</span><span>${peso(i.qty*i.price)}</span>`; ul.appendChild(li); });
-  const fee = document.createElement('li'); fee.innerHTML = `<span>${o.type==='delivery'?'Delivery':'Pickup'}</span><span>${o.fee?peso(o.fee):'Free'}</span>`; ul.appendChild(fee);
+  const fee = document.createElement('li'); fee.innerHTML = `<span>Pickup</span><span>Free</span>`; ul.appendChild(fee);
   const tot = document.createElement('li'); tot.innerHTML = `<b>Total</b><b>${peso(o.total)}</b>`; ul.appendChild(tot);
   $('modal').hidden = false; $('mClose').focus();
   Object.keys(cart).forEach(k=>delete cart[k]);
@@ -1059,7 +1047,7 @@ if(BEHOLD_FEED_ID){
 /* ---------- 3D poster wall ---------- */
 const POSTERS = [
   ['our-matcha-club','Our Matcha Club'],['zero-drama','Zero drama'],['classic-club','The Classic Club'],['berry-first','Berry First Matcha'],['sunny-mango','Sunny Mango Matcha'],
-  ['star-girl','Star Girl Matcha'],['good-vibes','Good Vibes Matcha'],['velvet-hoji','Velvet Hoji'],['midnight-storm','Midnight Storm'],['white-mocha','White Mocha Einspanner'],['cafe-latte','Cafe Latte'],['mocha-loka','Mocha Loka'],
+  ['star-girl','Star Girl Matcha'],['good-vibes','Good Vibes Matcha'],['velvet-hoji','Velvet Hoji'],['cafe-latte','Cafe Latte'],['mocha-loka','Mocha Loka'],
   ['oat-white','Oat White'],['mango-espresso-tonic','Mango Espresso Tonic'],['choco-loko','Choco Loko'],['tamago-sando','Tamago Sando'],['grilled-cheese','Grilled Cheese Sandwich'],['cookies','Homebaked Cookies'],['pastry-of-the-day','Pastry of the Day']
 ];
 (function(){
