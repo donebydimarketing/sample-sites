@@ -596,7 +596,7 @@ footer .copy{grid-column:1/-1;border-top:1px solid rgba(244,239,220,.25);padding
           <div><span id="sFeeLabel">Pickup</span><span id="sFee">Free</span></div>
           <div class="grand"><span>Total</span><span id="sTot">&#8369;0</span></div>
         </div>
-        <p class="note"><b>All orders are for pickup.</b> Pick up your order yourself, or send any same-day courier (Grab, Lalamove, etc.). Pickup: 2 Quartz St., Meralco Village, Lias, Marilao, Bulacan.</p>
+        <p class="note"><b>ALL ORDERS ARE FOR PICKUP.</b> You may pick up your order personally or through any same-day courier (Grab, Lalamove, etc). Pickup: 2 Quartz St., Meralco Village, Lias, Marilao, Bulacan.</p>
       </div>
 
       <div class="panel">
@@ -894,7 +894,8 @@ function orderText(o){
   L.push('');
   L.push('Name: ' + o.name);
   L.push('Phone: ' + o.phone);
-  L.push('Pickup (Meralco Village, Lias, Marilao)');
+  L.push('PICKUP ONLY. Pickup address: 2 Quartz St., Meralco Village, Lias, Marilao, Bulacan');
+  L.push('All orders are for pickup. You may pick up your order personally or through any same-day courier (Grab, Lalamove, etc).');
   L.push('');
   L.push('Items:');
   o.items.forEach(i=>L.push(i.qty + ' x ' + i.name + ' - ' + peso(i.qty*i.price)));
@@ -946,7 +947,7 @@ $('orderForm').addEventListener('submit', async e=>{
 function showModal(o){
   $('mNum').textContent = 'Order ' + o.number;
   const first = o.name.split(' ')[0];
-  const payMsg = 'We will send your ' + o.payment + ' payment link in the chat.';
+  const payMsg = 'We will send your ' + o.payment + ' payment link in the chat. We will message you as soon as your order is acknowledged, and again when you are ready to book your courier. Pickup: 2 Quartz St., Meralco Village, Lias, Marilao, Bulacan.';
   $('mFb').hidden = !USE_MESSENGER; $('mCopy').hidden = !USE_MESSENGER;
   if(USE_MESSENGER){
     $('mTitle').textContent = 'Last step, ' + first + '!';
